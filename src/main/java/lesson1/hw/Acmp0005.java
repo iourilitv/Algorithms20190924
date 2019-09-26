@@ -7,6 +7,7 @@ package lesson1.hw;
  * Домашняя работа.
  * @author Litvinenko Yuriy
  * Задачи на http://acmp.ru
+ * Тема. Сортировка и последовательности.
  * DONE ЗАДАЧА №5. Статистика (Время: 1 сек. Память: 16 Мб Сложность: 15%)
  * Вася не любит английский язык, но каждый раз старается получить хотя бы четверку за четверть,
  * чтобы оставаться ударником. В текущей четверти Вася заметил следующую закономерность:
@@ -48,7 +49,7 @@ public class Acmp0005 {
         StringBuilder resultString1 = new StringBuilder();
         StringBuilder resultString2 = new StringBuilder();
 
-        String msg;// = "";
+        String msg;
         //принимаем количество дней
         int num = Integer.parseInt(in.nextLine());
         //инициируем целочисленный массив дней
