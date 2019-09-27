@@ -1,18 +1,21 @@
 package lesson1.searching;
 
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Тема. Бинарный поиск.
  * https://algocode.ru/page/c-2-binary-search/
  * @author of the update Litvinenko Yuriy
- * DONE.Задача.
- * Найти в отсортированном целочисленном массиве размером n, число value.
- * Вывести индекс числа в массиве или -1, если его нет.
+ * Задача 1.
+ * Принять в консоль целочисленные значения(через пробел):
+ * n - размер массива и value - искомый элемент.
+ * Создать целочисленном массив со случайными значениями в диапазоне 0 <= arr[i] <= n;
+ * Отсортировать целочисленный массив.
+ * Найти индекс первого числа, равного value в отсортированном целочисленном массиве.
+ * Вывести индекс найденного числа в массиве или -1, если его нет.
  */
-public class BinarySearch {
+public class BinarySearch2 {
     public static void main(String[] args) {
         //TODO Important! Сканер после принятия строки все остальное будет принимать тоже как строку!
         // Поэтому требуются отдельные сканеры на int и String
@@ -32,10 +35,12 @@ public class BinarySearch {
                 //Принимаем значение размера массива
                 n = in.nextInt();
                 //Принимаем значение входного элемента
-                value = in.nextInt();// ok: 0, 3, 18, 50, 98, 100, 102, 173, 198, 199
+                value = in.nextInt();
             } while(n < 1);
             //Создаем и наполняем массив
-            int[] intArray = initGame(n, out);
+            int[] intArray = createRandomIntArray(n, out);
+            //Сортируем массив
+            intArray = sortRandomIntArray(intArray, out);
 
             //Вычисляем результат проверки
             int result = binarySearchingInIntArray(intArray, value, out);
@@ -62,17 +67,18 @@ public class BinarySearch {
     }
 
     /**
-     * Метод инициализации теста.
+     * Метод создания целочисленного массива, заполненного случайными значениями.
      * @param n - размер массива
      * @param out - объект принтера(не печатает без out.flush();!)
-     * @return - заполненный массив
+     * @return - массив, заполненный случайными целочисленными значениями от 0 до n
      */
-    private static int[] initGame(int n, PrintWriter out) {
+    private static int[] createRandomIntArray(int n, PrintWriter out) {
+        Random random = new Random();
         //Инициируем массив заданного размера
         int[] intArray = new int[n];
         //наполняем массив элементами по-порядку
         for (int i = 0; i < intArray.length; i++) {
-            intArray[i] = i * 2;
+            intArray[i] = random.nextInt(n);
         }
 
         //TODO временно
@@ -80,6 +86,44 @@ public class BinarySearch {
         out.flush();
 
         return intArray;
+    }
+
+    /**
+     * Метод сортировки целочисленного массива, заполненного случайными значениями.
+     * @param out - объект принтера(не печатает без out.flush();!)
+     * @return - отсортированный (по возрастанию) массив, заполненный случайными целочисленными
+     * значениями от 0 до n
+     */
+    private static int[] sortRandomIntArray(int[] array, PrintWriter out) {
+        int temp;
+
+        //TODO временно
+        //out.print("array.length: " + array.length + ".\n[");
+        out.println("array.length: " + array.length);
+        out.flush();
+
+        //перебираем массив массив элементами по-порядку
+        for (int i = 0; i < array.length; i++) {
+            temp = array[i];
+            for (int j = i + 1; j < array.length; j++) {
+                if(array[j] < temp){
+                    array[i] = array[j];
+                    array[j] = temp;
+                    temp = array[i];
+                }
+            }
+
+            //TODO временно
+//            out.print(array[i]);
+//            out.print(i != array.length - 1 ? ", " : "]\n");
+//            out.flush();
+        }
+
+        //TODO временно
+        out.println(Arrays.toString(array));
+        out.flush();
+
+        return array;
     }
 
     /**

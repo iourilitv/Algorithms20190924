@@ -2,6 +2,13 @@ package lesson1.searching;
 
 import java.util.Arrays;
 
+/**
+ * Тема. Бинарный поиск.
+ * @author Litvinenko Yuriy
+ * DONE but not optimally.Задача.
+ * Найти в отсортированном целочисленном массиве размером n, число value.
+ * Вывести индекс числа в массиве или -1, если его нет.
+ */
 public class BinSearch {
 
     public static void main(String[] args) {
@@ -24,7 +31,7 @@ public class BinSearch {
      * @param value int элемент поиска
      * @return Индекс совпадающего элемента, если нет - -1
      */
-    public static int binarySearchingInIntArray(int[] array, int value){
+    private static int binarySearchingInIntArray(int[] array, int value){
         //устанавливаем нижнюю границу проверяемой области
         int lowIndex = 0;
         //устанавливаем верхнюю границу проверяемой области
@@ -96,58 +103,4 @@ public class BinSearch {
             System.out.println(i++ + ": " + "array[" + halfIndex + "]: " + array[halfIndex]);
         }
     }
-
-    /*public static int binarySearchingInIntArray(int[] array, int value){
-        int i = 1;//TODO временно
-        int index = -1;
-        int lowIndex = 0;
-        int highIndex = array.length - 1;
-        int halfIndex = lowIndex;
-        while(array[halfIndex] != value || highIndex - lowIndex <= 1) {
-            halfIndex = (highIndex + lowIndex) % 2 == 0 ?
-                    (highIndex + lowIndex) / 2 :
-                    //(highIndex + lowIndex) / 2 + 1;
-                    (highIndex + lowIndex + 1) / 2;
-
-            System.out.println(i++ + ": " + "array[" + halfIndex + "]: " + array[halfIndex]);
-
-            if(array[halfIndex] > value){
-                highIndex = halfIndex;
-            } else{
-                lowIndex = halfIndex;
-            }
-            //условие, чтобы выйти при значении проверяемиого элемента между двумя проверенными элементами массива
-            if(highIndex - lowIndex <= 1){
-                return index;
-            }
-        }
-        //index = halfIndex;
-        //return index;
-        return halfIndex;
-    }*/
-
-    /*public static int binarySearchingInIntArray(int[] array, int value){
-        int i = 1;
-        int index = -1;
-        int lowIndex = 0;
-        int highIndex = array.length - 1;
-        int halfIndex;
-        do {
-            halfIndex = (highIndex + lowIndex) % 2 == 0 ?
-                    (highIndex + lowIndex) / 2 :
-                    (highIndex + lowIndex) / 2 + 1;
-
-            System.out.println(i++ + ": " + "array[" + halfIndex + "]: " + array[halfIndex]);
-
-            if(array[halfIndex] > value){
-                highIndex = halfIndex;
-            } else{
-                lowIndex = halfIndex;
-            }
-        }
-        while(array[halfIndex] != value);
-        index = halfIndex;
-        return index;
-    }*/
-
 }
