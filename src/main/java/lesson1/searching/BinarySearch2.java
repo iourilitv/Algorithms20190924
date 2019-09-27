@@ -40,12 +40,14 @@ public class BinarySearch2 {
             //Создаем и наполняем массив
             int[] intArray = createRandomIntArray(n, out);
             //Сортируем массив
-            intArray = sortRandomIntArray(intArray, out);
+            //intArray = sortRandomIntArray(intArray, out);
+            //Исследуем массив непосредственно в процессе сортировки
+            intArray = sortAndSearchRandomIntArray(intArray, value, out);
 
             //Вычисляем результат проверки
-            int result = binarySearchingInIntArray(intArray, value, out);
-            out.println("value: " + value + " = result индекс: " + result);
-            out.flush();
+//            int result = binarySearchingInIntArray(intArray, value, out);
+//            out.println("value: " + value + " = result индекс: " + result);
+//            out.flush();
         }
         //Закрываем входные и выходной ресурсы
         in.close();
@@ -98,29 +100,82 @@ public class BinarySearch2 {
         int temp;
 
         //TODO временно
-        //out.print("array.length: " + array.length + ".\n[");
         out.println("array.length: " + array.length);
         out.flush();
 
         //перебираем массив массив элементами по-порядку
         for (int i = 0; i < array.length; i++) {
-            temp = array[i];
             for (int j = i + 1; j < array.length; j++) {
-                if(array[j] < temp){
+                if(array[j] < array[i]){
+                    temp = array[i];
                     array[i] = array[j];
                     array[j] = temp;
-                    temp = array[i];
                 }
             }
-
-            //TODO временно
-//            out.print(array[i]);
-//            out.print(i != array.length - 1 ? ", " : "]\n");
-//            out.flush();
         }
 
         //TODO временно
         out.println(Arrays.toString(array));
+        out.flush();
+
+        return array;
+    }
+
+    /**
+     * Метод одновременной сортировки случайного целочисленного массива и поиска всех элементов,
+     * совпадающих с элементом поиска.
+     * @param array целочисленный массив, заполненный случайными целочисленными значениями от 0 до n
+     * @param value int элемент поиска
+     * @param out - объект принтера(не печатает без out.flush();!)
+     * @return - отсортированный (по возрастанию) массив, заполненный случайными целочисленными
+     * значениями от 0 до n
+     */
+    private static int[] sortAndSearchRandomIntArray(int[] array, int value, PrintWriter out) {
+        int temp;
+        //устанавливаем начальное значение минимального индекса для найденных элементов(самого левого)
+        int lowIndex = -1;
+        //устанавливаем начальное значение максимального индекса для найденных элементов(самого правого)
+        int highIndex = array.length;
+
+        //TODO временно
+        out.println("array.length: " + array.length);
+        out.flush();
+
+        //перебираем массив массив элементами по-порядку
+        for (int i = 0; i < array.length; i++) {
+            for (int j = i + 1; j < array.length; j++) {
+                if(array[j] < array[i]){
+                    temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+            }
+
+            // елемент совпадает с элементом поиска
+            if(array[i] == value) {
+                // и если это первый найденный элемент
+                if (lowIndex == -1) {
+                    // то запоминаем его индекс, как начало диапазона сопадающих элементов
+                    // (т.к. в ячейке самый маленький элемент)
+                    lowIndex = i;
+                    highIndex = lowIndex;
+                } else {
+                    //но если это не первый найденный элемент, то инкрементируем правый индекс,
+                    // как конец диапазона сопадающих элементов
+                    highIndex++;
+                }
+            }
+        }
+
+        //TODO временно
+        out.println(Arrays.toString(array));
+        out.println("value: " + value);
+        if(lowIndex == -1){
+            out.println("***There is no marching!***");
+        } else {
+            out.println("The count of marching: " + (highIndex - lowIndex + 1));
+            out.println("Index of the first marching: " + lowIndex + ". Index of the last marching: " + highIndex);
+        }
         out.flush();
 
         return array;
