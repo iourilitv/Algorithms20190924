@@ -171,10 +171,10 @@ public class BinarySearch2 {
         out.println(Arrays.toString(array));
         out.println("value: " + value);
         if(lowIndex == -1){
-            out.println("***There is no marching!***");
+            out.println("***There is no matching!***");
         } else {
-            out.println("The count of marching: " + (highIndex - lowIndex + 1));
-            out.println("Index of the first marching: " + lowIndex + ". Index of the last marching: " + highIndex);
+            out.println("The count of matching: " + (highIndex - lowIndex + 1));
+            out.println("Index of the first matching: " + lowIndex + ". Index of the last matching: " + highIndex);
         }
         out.flush();
 
