@@ -8,7 +8,7 @@ import java.util.Scanner;
  * Тема. Бинарный поиск.
  * https://algocode.ru/page/c-2-binary-search/
  * @author of the update Litvinenko Yuriy
- * Задача. Злые коровы или загнать коров в стойла.
+ * DONE Задача. Злые коровы или загнать коров в стойла.
  * Общий принцип решения: бинарный поиск по ответу.
  * Условие: На прямой расположены N стойл (даны их координаты на прямой), в которые необходимо
  * расставить K коров так, чтобы минимальное расcтояние между коровами было как можно больше.
@@ -44,11 +44,18 @@ import java.util.Scanner;
  * Нам точно хватит расстояния 0, так как гарантируется, что коров меньше, чем стойл.
  * И точно не хватит расстояния max_coord - min_coord + 1, так как по условию есть хотя бы 2 коровы.
  */
-public class Angry_cows {
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        PrintWriter out = new PrintWriter(System.out);
 
+public class AngryCowsMain{
+    public static void main(String[] args) {
+        new AngryCows().run();
+    }
+}
+
+class AngryCows {
+    private Scanner in = new Scanner(System.in);
+    private PrintWriter out = new PrintWriter(System.out);
+
+    void run() {
         //Принимаем количество коров
         int cowsNumber = in.nextInt();
         //Принимаем количество стойл для коров
@@ -62,14 +69,20 @@ public class Angry_cows {
         int[] cowStallsCoordinates = new int[]{2, 5, 7, 11, 15, 20};*/
 
         //Принимаем координаты стойл для коров и наполняем массив
-        cowStallsCoordinates = takeCoordinatesIntoIntArray(cowStallsCoordinates, in, out);
-
+        cowStallsCoordinates = takeCoordinatesIntoIntArray(cowStallsCoordinates);
+        //находим
         int maxDistance = findMaxDistance(cowsNumber, cowStallsCoordinates);
         out.println(maxDistance);
         out.flush();
     }
 
-    private static int[] takeCoordinatesIntoIntArray(int[] array, Scanner in, PrintWriter out){
+    /**
+     * Метод принимающий входящие значения и заполняющий массив координат.
+     * Выводит на печать готовый массив.
+     * @param array - пустой целочисленный массив
+     * @return целочисленный массив, заполненный координатами стойл для коров
+     */
+    private int[] takeCoordinatesIntoIntArray(int[] array){
         for (int i = 0; i < array.length; i++) {
             array[i] = in.nextInt();
         }
@@ -78,8 +91,14 @@ public class Angry_cows {
         return array;
     }
 
-
-    public static int findMaxDistance(int cowsNumber, int[] array){
+    /**
+     * Метод нахождения в массиве максимального расстояния между стойлами,
+     * при котором можно вместить всех коров
+     * @param cowsNumber - заданное количество коров
+     * @param array - целочисленный массив, заполненный координатами стойл для коров
+     * @return значение максимально возможной дистанции между коровами
+     */
+    private int findMaxDistance(int cowsNumber, int[] array){
         //Запоминаем минимально возможное значение дистанции между коровами
         //расставить коров на расстоянии хотя бы 0 можно всегда
         int minDistance = 0;
@@ -89,7 +108,7 @@ public class Angry_cows {
         //Объявляем переменную для средней дистанции
         int middleDistance;
 
-        //бинарный поиск
+        //***Бинарный поиск***
         //крутим цикл пока не сблизим края поиска до одного элемента
         while(maxDistance - minDistance != 1){
             //устанавливаем на середине диапазона расстояний
@@ -113,20 +132,27 @@ public class Angry_cows {
         return -1;
     }
 
-    //проверяем, можно ли поставить cowsNumber коров в стойла, если между коровами расстояние хотя бы verifiedDistance
-    private static boolean isCorrect(int cowsNumber, int[] array, int verifiedDistance){
+    /**
+     * Метод проверки воможно ли поставить cowsNumber коров в стойла, если между коровами
+     * расстояние хотя бы verifiedDistance
+     * @param cowsNumber - заданное количество коров
+     * @param array - целочисленный массив, заполненный координатами стойл для коров
+     * @param verifiedDistance - проверяемое значение возможной дистанции между коровами
+     * @return true - номер текущей коровы не меньше общего количества коров(значит все вместились)
+     */
+    private boolean isCorrect(int cowsNumber, int[] array, int verifiedDistance){
         //запоминаем номер текущей коровы
         int currentCowsNumber = 1;
         //и ее координаты(заняла первое стойло)
         int currentCowsCoordinate = array[0];
         //проверяем в цикле все стойла
-        for (int i = 0; i < array.length; i++) {
+        for (int value : array) {
             //если разница значениях координат не меньше, чем проверяемая дистанция
-            if(array[i] - currentCowsCoordinate >= verifiedDistance){
+            if (value - currentCowsCoordinate >= verifiedDistance) {
                 //берем следующую корову
                 currentCowsNumber++;
                 //и запоминаем координаты текущей коровы(ставим корову в стойло)
-                currentCowsCoordinate = array[i];
+                currentCowsCoordinate = value;
             }
         }
         //если номер текущей коровы не меньше общего количества коров, возвращаем true
@@ -134,24 +160,3 @@ public class Angry_cows {
     }
 
 }
-//coords = [2, 5, 7, 11, 15, 20] # координаты стойл
-//k = 3 # число коров
-//
-//def is_correct(x): # проверяем, можно ли поставить K коров в стойла, если между коровами расстояние хотя бы x
-//    cows = 1
-//    last_cow = coords[0]
-//    for c in coords:
-//        if c - last_cow >= x:
-//            cows += 1
-//            last_cow = c
-//    return cows >= k
-//
-//left = 0 # расставить коров на расстоянии хотя бы 0 можно всегда
-//right = max(coords) - min(coords) + 1 # при таком расстоянии даже 2 коровы поставить нельзя
-//while right - left != 1:
-//    middle = (left + right) // 2
-//    if is_correct(middle): # проверяем, можно ли поставить K коров в стойла, если между коровами расстояние хотя бы middle
-//        left = middle # left всегда должна указывать на ситуацию, когда можно поставить коров
-//    else:
-//        right = middle # right всегда должна указывать на ситуацию, когда нельзя поставить коров
-//print left # left - максимальное расстояние, на котором можно расставить коров в стойла
