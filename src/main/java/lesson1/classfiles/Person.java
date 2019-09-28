@@ -1,4 +1,4 @@
-package lesson1;
+package lesson1.classfiles;
 
 public class Person {
     private String name;

@@ -1,11 +1,13 @@
-package lesson1;
+package lesson1.classfiles;
 
 public class Main {
     public static void main(String[] args) {
         int[] arr = new int[5];
-        String[] logins = {"dfg","fgdf"};
+        String[] logins = {"dfg","fgdf", "string"};
 
+        //System.out.println(uniq(logins, "string"));
 
+        System.out.println("counter: " + someThink());
     }
 
     static boolean uniq(String[] logins, String userLogin){
