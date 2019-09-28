@@ -7,12 +7,17 @@ import java.util.*;
  * Тема. Бинарный поиск.
  * https://algocode.ru/page/c-2-binary-search/
  * @author of the update Litvinenko Yuriy
- * Задача 1.
+ * Задачи.
  * Принять в консоль целочисленные значения(через пробел):
  * n - размер массива и value - искомый элемент.
- * Создать целочисленном массив со случайными значениями в диапазоне 0 <= arr[i] <= n;
- * Отсортировать целочисленный массив.
- * Найти индекс первого числа, равного value в отсортированном целочисленном массиве.
+ * DONE 1.1. Создать целочисленном массив со случайными значениями в диапазоне 0 <= arr[i] <= n;
+ * DONE 1.2. Отсортировать целочисленный массив.
+ * DONE 1.3. Добавить в процесс сортировки решение задач 2.х.
+ * 2.1. Найти индекс первого числа, равного value в отсортированном целочисленном массиве.
+ * Вывести индекс найденного числа в массиве или -1, если его нет.
+ * 2.2. Найти индекс последнего числа, равного value в отсортированном целочисленном массиве.
+ * Вывести индекс найденного числа в массиве или -1, если его нет.
+ * 2.3. Найти количество совпадений с value в отсортированном целочисленном массиве.
  * Вывести индекс найденного числа в массиве или -1, если его нет.
  */
 public class BinarySearch2 {
@@ -37,17 +42,30 @@ public class BinarySearch2 {
                 //Принимаем значение входного элемента
                 value = in.nextInt();
             } while(n < 1);
-            //Создаем и наполняем массив
+
+            //1.1. Создаем и наполняем массив
             int[] intArray = createRandomIntArray(n, out);
-            //Сортируем массив
-            //intArray = sortRandomIntArray(intArray, out);
-            //Исследуем массив непосредственно в процессе сортировки
+
+            //1.2. Просто сортируем массив методом пузырков//FIXME
+            int[] intArray2 = sortRandomIntArray(intArray, out);
+
+            //1.3. Исследуем массив непосредственно в процессе сортировки
             intArray = sortAndSearchRandomIntArray(intArray, value, out);
 
-            //Вычисляем результат проверки
-//            int result = binarySearchingInIntArray(intArray, value, out);
-//            out.println("value: " + value + " = result индекс: " + result);
-//            out.flush();
+            //2.1 - ищем индекс первого совпадения
+            int lowIndex = binarySearchingInIntArray1(intArray2, value, out);
+            //out.println("Task 2.1. value: " + value + " >> lowIndex: " + lowIndex);
+
+            //2.2 - ищем индекс последнего совпадения
+            int highIndex = binarySearchingInIntArray2(intArray, value, out);
+            //out.println("Task 2.2. value: " + value + " = result индекс: " + highIndex);
+
+            //2.3. Вычисляем количество совпадений
+            int number = calculateMatchingNumber(lowIndex, highIndex, value, out);
+            //out.println("\nTask 2.3. value: " + value + " >> number of coincidences: " + number);
+
+            out.println();
+            out.flush();
         }
         //Закрываем входные и выходной ресурсы
         in.close();
@@ -84,14 +102,14 @@ public class BinarySearch2 {
         }
 
         //TODO временно
-        out.println(Arrays.toString(intArray));
+        out.println("Task 1.1. Random array.\n" + Arrays.toString(intArray));
         out.flush();
 
         return intArray;
     }
 
     /**
-     * Метод сортировки целочисленного массива, заполненного случайными значениями.
+     * Метод пузырьковой сортировки целочисленного массива, заполненного случайными значениями.//FIXME
      * @param out - объект принтера(не печатает без out.flush();!)
      * @return - отсортированный (по возрастанию) массив, заполненный случайными целочисленными
      * значениями от 0 до n
@@ -100,13 +118,15 @@ public class BinarySearch2 {
         int temp;
 
         //TODO временно
-        out.println("array.length: " + array.length);
+        out.println("Task 1.2. Sorted array.");
         out.flush();
 
         //перебираем массив массив элементами по-порядку
-        for (int i = 0; i < array.length; i++) {
+        //просто в сотрировке не нужно проверять последний элемент, поэтому array.length - 1 вместо array.length
+        for (int i = 0; i < array.length - 1; i++) {
             for (int j = i + 1; j < array.length; j++) {
                 if(array[j] < array[i]){
+                    //FIXME если сделать не статик, то можно убрать в отдельный метод swap() - поменять местами элементы
                     temp = array[i];
                     array[i] = array[j];
                     array[j] = temp;
@@ -138,7 +158,7 @@ public class BinarySearch2 {
         int highIndex = array.length;
 
         //TODO временно
-        out.println("array.length: " + array.length);
+        out.println("\nTask 1.3. Sorted array.");
         out.flush();
 
         //перебираем массив массив элементами по-порядку
@@ -182,13 +202,13 @@ public class BinarySearch2 {
     }
 
     /**
-     * Метод поиска элемента в отсортированном int массиве
+     * Метод поиска первого совпадающего элемента в отсортированном int массиве
      * @param array int массив
      * @param value int элемент поиска
      * @param out - объект принтера(не печатает без out.flush();!)
-     * @return Индекс совпадающего элемента, если нет - -1
+     * @return Индекс первого совпадающего элемента, если нет - -1
      */
-    private static int binarySearchingInIntArray(int[] array, int value, PrintWriter out){
+    private static int binarySearchingInIntArray1(int[] array, int value, PrintWriter out){
         //устанавливаем начальную нижнюю границу проверяемой области(специально за областью)
         int lowIndex = -1;
         //устанавливаем начальную верхнюю границу проверяемой области(специально за областью)
@@ -202,6 +222,13 @@ public class BinarySearch2 {
         //TODO временно
         int i = 1;
 
+        //TODO временно
+        out.println("\nTask 2.1. Binary searching the index of the first matching.");
+        out.println("value: " + value);
+        out.flush();
+
+        //инициируем переменную было ли совпадение
+        boolean isValue = false;
         //индекс проверяемого элемента
         int halfIndex;
         //крутим цикл пока не найдем совпадение или разница между мин. и макс.индексами не станет меньше или равна 1
@@ -212,32 +239,154 @@ public class BinarySearch2 {
             out.flush();
 
             //вычисляем индекс середины
-            halfIndex = (highIndex + lowIndex) / 2;
+            halfIndex = lowIndex + (highIndex - lowIndex) / 2;
 
             //TODO временно
             out.println("array[" + halfIndex + "]: " + array[halfIndex]);
             out.flush();
 
             //сравниваем больше ли элемент массива, чем входной элемент
-            if(array[halfIndex] >= value){
+            if(array[halfIndex] > value){
                 //если больше, сдвигаем верхнюю границу проверяемой области
                 highIndex = halfIndex;
-            } else{
+            } else if(array[halfIndex] < value){
                 //если меньше, сдвигаем нижнюю границу проверяемой области
                 lowIndex = halfIndex;
-            }
-            //если индекс макс.индекс диапазона не равен начальному значении и
-            // входной элемент совпадает с проверяемым элементом,
-            if(highIndex != array.length && array[highIndex] == value){
-                //возвращаем его индекс
-                return highIndex;
+            } else {
+                //если равно, то первое совпадение - или здесь, или слева, тогда
+                //сдвигаем верхнюю границу проверяемой области
+                highIndex = halfIndex;
+                //устанавливаем значение "было совпадение"
+                isValue = true;
             }
         }
 
+        // если было совпадение с проверяемым элементом,
+        if(isValue){
+
+            //TODO временно
+            out.println("Index of the first matching: " + highIndex);
+
+            //возвращаем его индекс
+            return highIndex;
+        }
+
         //TODO временно
-        out.println("No matching! " + "array[lowIndex:" + lowIndex + "]: " + array[lowIndex] + ". array[highIndex:" + highIndex + "]: " + array[highIndex]);
+        out.println("No matching! " + "array[lowIndex:" + lowIndex + "]: " + array[lowIndex] +
+                ". array[highIndex:" + highIndex + "]: " + array[highIndex]);
         out.flush();
 
         return -1;
+    }
+
+    /**
+     * Метод поиска последнего совпадающего элемента в отсортированном int массиве
+     * @param array - int массив
+     * @param value - int элемент поиска
+     * @param out - объект принтера(не печатает без out.flush();!)
+     * @return Индекс последнего совпадающего элемента, если нет - -1
+     */
+    private static int binarySearchingInIntArray2(int[] array, int value, PrintWriter out){
+        //устанавливаем начальную нижнюю границу проверяемой области(специально за областью)
+        int lowIndex = -1;
+        //устанавливаем начальную верхнюю границу проверяемой области(специально за областью)
+        int highIndex = array.length;
+        //проверяем входит ли элемент в диапазон массива
+        if(value < array[lowIndex + 1] || array[highIndex - 1] < value){
+            //выходим с негативным результатом, если не входит
+            return -1;
+        }
+
+        //TODO временно
+        int i = 1;
+
+        //TODO временно
+        out.println("\nTask 2.2. Binary searching the index of the last matching.");
+        out.println("value: " + value);
+        out.flush();
+
+        //инициируем переменную было ли совпадение
+        boolean isValue = false;
+        //индекс проверяемого элемента
+        int halfIndex;
+        //крутим цикл пока не найдем совпадение или разница между мин. и макс.индексами не станет меньше или равна 1
+        while(highIndex - lowIndex > 1) {
+
+            //TODO временно
+            out.print(i++ + ": ");
+            out.flush();
+
+            //вычисляем индекс середины
+            halfIndex = lowIndex + (highIndex - lowIndex) / 2;
+
+            //TODO временно
+            out.println("array[" + halfIndex + "]: " + array[halfIndex]);
+            out.flush();
+
+            //сравниваем больше ли элемент массива, чем входной элемент
+            if(array[halfIndex] > value){
+                //если больше, сдвигаем верхнюю границу проверяемой области
+                highIndex = halfIndex;
+            } else if(array[halfIndex] < value){
+                //если меньше, сдвигаем нижнюю границу проверяемой области
+                lowIndex = halfIndex;
+            } else {
+                //если равно, то последнее совпадение - или здесь, или справа, тогда
+                //сдвигаем нижнюю границу проверяемой области
+                lowIndex = halfIndex;
+                //устанавливаем значение "было совпадение"
+                isValue = true;
+            }
+        }
+
+        // если было совпадение с проверяемым элементом,
+        if(isValue){
+
+            //TODO временно
+            out.println("Index of the last matching: " +lowIndex);
+
+            //возвращаем его индекс
+            return lowIndex;
+        }
+
+        //TODO временно
+        out.println("No matching! " + "array[lowIndex:" + lowIndex + "]: " + array[lowIndex] +
+                ". array[highIndex:" + highIndex + "]: " + array[highIndex]);
+        out.flush();
+
+        return -1;
+    }
+
+    /**
+     * Метод вычисления количества совпадений
+     * @param lowIndex - индекс первого совпадающего элемента, если нет - -1
+     * @param highIndex - индекс последнего совпадающего элемента, если нет - -1
+     * @param value - int элемент поиска
+     * @param out - объект принтера(не печатает без out.flush();!)
+     * @return количество совпадений или -1, если нет совпадений
+     */
+    private static int calculateMatchingNumber(int lowIndex, int highIndex, int value, PrintWriter out) {
+        int number;
+
+        //TODO Временно
+        out.println("\nTask 2.3. value: " + value);
+
+        //если совпадений нет, то возвращаем -1
+        if(lowIndex == -1 || highIndex == -1){
+
+            //TODO Временно
+            out.println("***No matching!***");
+
+            number = -1;
+        } else{
+            //вычисляем количество совпадений
+            number = highIndex - lowIndex + 1;
+
+            //TODO Временно
+            out.println("Number of coincidences: " + number);
+        }
+        out.flush();
+
+        return number;
     }
 }
