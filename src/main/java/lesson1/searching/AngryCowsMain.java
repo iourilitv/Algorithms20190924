@@ -54,13 +54,16 @@ public class AngryCowsMain{
 class AngryCows {
     private Scanner in = new Scanner(System.in);
     private PrintWriter out = new PrintWriter(System.out);
+    private int cowsNumber;
+    private int cowStallsNumber;
+    private int[] cowStallsCoordinates;
 
     void run() {
         //Принимаем количество коров
-        int cowsNumber = in.nextInt();
+        cowsNumber = in.nextInt();
         //Принимаем количество стойл для коров
-        int cowStallsNumber = in.nextInt();
-        int[] cowStallsCoordinates = new int[cowStallsNumber];
+        cowStallsNumber = in.nextInt();
+        cowStallsCoordinates = new int[cowStallsNumber];
 
         /*//Принимаем количество коров
         int cowsNumber = 3;
