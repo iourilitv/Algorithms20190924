@@ -1,4 +1,4 @@
-package lesson1.hw;
+package lesson2.hw;
 
 /**
  * Алгоритмы_и_структуры_данных_на_Java.БазовыйКурс. 24.09.2019 Webinar.

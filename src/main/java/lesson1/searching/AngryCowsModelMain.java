@@ -45,13 +45,13 @@ import java.util.Scanner;
  * И точно не хватит расстояния max_coord - min_coord + 1, так как по условию есть хотя бы 2 коровы.
  */
 
-public class AngryCowsMain{
+public class AngryCowsModelMain{
     public static void main(String[] args) {
-        new AngryCows().run();
+        new AngryCowsModel().run();
     }
 }
 
-class AngryCows {
+class AngryCowsModel {
     private Scanner in = new Scanner(System.in);
     private PrintWriter out = new PrintWriter(System.out);
     private int cowsNumber;
