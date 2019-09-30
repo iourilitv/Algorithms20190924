@@ -30,10 +30,20 @@ import java.util.Scanner;
  * 1 2 1 1
  * 3
  * Формализованная задача.
- * Принять длину массива. Инициировать массив для количества страниц в каждой главе.
- * Принять значения и наполнить массив глав.
- * Суммировать все страницы в романе, пролистав массив.
- * Acmp0523
+ * Найти минимально возможный объем(в страницах) самого «толстого» тома.
+ * Принять количество глав(длину массива). Инициировать массив для количества страниц в каждой главе.
+ * Принять значения и наполнить массив глав и одновременно найти максимальное количество страниц
+ * в одной главе.
+ * Принять количество томов.
+ * Определить диапазон поиска:
+ *  мин.значение - максимальное количество страниц в одной главе - 1,
+ *  максимальное - максимальное количество страниц в одной главе * количество томов + 1.
+ * Определить условие:
+ * 1. Искомое значение - максимальное количество страниц в одной главе, если количество страниц
+ * самой большой главы не меньше суммы страниц остальных глав.
+ * 2. проверяемое количество томов, в которых возможно разместить все страницы должно быть
+ *   больше заданного количества томов.
+ * В бинарном поиске найти значение удовлетворяющее условию.
  */
 public class Acmp0523 {
     public static void main(String[] args){
@@ -44,95 +54,158 @@ public class Acmp0523 {
 class Task0523 {
     private Scanner in = new Scanner(System.in);
     private PrintWriter out = new PrintWriter(System.out);
-    private int width;//Ширина диплома
-    private int height;//Высота диплома
-    private int number;//Количество дипломов
-    private long size;//размер квадрата(размер стороны)
+    private int tomesNumber;//Количество томов
+    //объявляем целочисленный массив с количествами страниц в каждой главе
+    private int[] chaptersArray;
+    //инициируем флаг
+    boolean flag;
 
     void run() {
         //Принимаем ширину диплома
-        width = in.nextInt();
-        //Принимаем высоту диплома
-        height = in.nextInt();
-        //Принимаем количество дипломов
-        number = in.nextInt();
-
-        //TODO временно
-        out.println("The calculating has started... please wait.");
-        out.flush();
-
-        //Находим размер требуемого квадрата в зависимости от расположения листов
-        if(width < height){
-            //расположение - Книга
-            size = findSize(width, height, number);
-        } else{
-            //расположение - Альбом
-            size = findSize(height, width, number);
+        //Количество глав
+        int chaptersNumber = in.nextInt();
+        //инициируем целочисленный массив с количествами страниц в каждой главе
+        chaptersArray = new int[chaptersNumber];
+        //инициируем максимальное количество страниц в одной главе
+        int maxPagesNumber = -1;
+        //инициируем общее количество страниц в романе
+        int totalPagesSum = 0;
+        //Принимаем количества страниц в главах и наполняем массив
+        for (int i = 0; i < chaptersArray.length; i++) {
+            chaptersArray[i] = in.nextInt();
+            //ищем максимальное число страниц в главе
+            if(chaptersArray[i] > maxPagesNumber){
+                //если элемент в массиве больше, то сохраняем его в переменной
+                maxPagesNumber = chaptersArray[i];
+            }
+            //приплюсовываем значение текущего элемента к переменной суммы
+            totalPagesSum += chaptersArray[i];
         }
 
-        out.println(size);
+        //TODO временно
+        //out.println("\n" + maxPagesNumber + ". " + totalPagesSum);
+        //out.flush();
+
+        //Принимаем количество томов
+        tomesNumber = in.nextInt();
+
+        //TODO временно
+        //out.println("The calculating has started... please wait.");
+        //out.flush();
+
+        //Находим минимально возможный объем(в страницах) самого «толстого» тома
+        int tomeSize = findMinAcceptableOfMaxTomeSize(maxPagesNumber, totalPagesSum);
+
+        out.println(tomeSize);
         out.flush();
     }
 
     /**
-     * Метод нахождения минимального размера стороны квадрата, для размещения требуемого количества дипломов
-     * @param lesser - размер минимальной стороны диплома
-     * @param larger - размер максимальной стороны диплома
-     * @param number - количество дипломов
-     * @return минимальный размер стороны квадрата, для размещения требуемого количества дипломов
+     * Метод нахождения минимально возможный объем(в страницах) самого «толстого» тома.
+     * @param maxPagesNumber - максимальное количество страниц в одной главе
+     * @param totalPagesSum - общее количество страниц в романе
+     * @return минимально возможный объем(в страницах) самого «толстого» тома.
      */
-    private long findSize(int lesser, int larger, int number){
-        //Запоминаем минимально возможный размер квадрата(с большим запасом)
-        long minSize = -1;
-        //Запоминаем максимально возможный размер квадрата(с большим запасом)
-        long maxSize = larger * (Math.round(Math.sqrt(number) + 1));
+    private int findMinAcceptableOfMaxTomeSize(int maxPagesNumber, int totalPagesSum){
+        //если том 1
+        if(tomesNumber == 1){
+            //то возвращаем общее количество страниц в романе
+            return totalPagesSum;
+        }
+        //если количество томов равны количеству глав
+        if(tomesNumber == chaptersArray.length){
+            //то возвращаем максимальное количество страниц в одной главе
+            return maxPagesNumber;
+        }
+
+        //Запоминаем минимально возможное количество страниц в томе
+        int minSize = 0;
+        //Запоминаем максимально возможное количество страниц в томе
+        int maxSize = totalPagesSum + 1;
         //Объявляем переменную для средней значения
-        long middleSize;
+        int middleSize;
+        //Объявляем переменную для искомого значения
+        int minimumSize = maxSize;
 
         //***Бинарный поиск***
         //крутим цикл пока не сблизим края поиска до одного элемента
         while(maxSize - minSize != 1){
             //устанавливаем на середине диапазона
             middleSize = minSize + (maxSize - minSize) / 2;
-            //если возможно вместить number коров в стенд размером middleSize
-            if(isCorrect(number, lesser, larger, middleSize)){
-                //minSize всегда должна указывать на ситуацию, когда условие выполняется
-                minSize = middleSize;
-            } else {
-                //maxSize всегда должна указывать на ситуацию, когда условие не выполняется
-                maxSize = middleSize;
+            //проверяем не больше ли проверяемое значение максимального количества в одной главе и
+            // выполняется ли условие с размером middleSize
+            boolean result = isCondition(middleSize, totalPagesSum);
+            //проверяем было ли совпадение
+            if(flag){
+                //если да есть хотя бы одно совпадение
+                if(middleSize <= maxPagesNumber || result){
+                    //minSize всегда должна указывать на ситуацию, когда условие выполняется
+                    minSize = middleSize;
+                    //запоминаем последнее совпавшее значение
+                    if(minimumSize > middleSize){
+                        minimumSize = middleSize;
+                    }
+                } else {
+                    //maxSize всегда должна указывать на ситуацию, когда условие не выполняется
+                    maxSize = middleSize;
+                }
+            } else{
+                //если нет совпадений
+                minSize++;
             }
         }
         //если была найдена хотя бы одна комбинация
-        if(minSize >= 0){
-            //возвращаем минимальный размер квадрата, на котором возможно разместить дипломы
-            return maxSize;
+        if(maxSize >= 0){
+            //возвращаем значение нижней границы диапазона поиска
+            return minimumSize;
         }
         //если нет - -1
         return -1;
     }
 
     /**
-     * Метод проверки возможно ли разместить number дипломов в квадрате размером хотя бы verifiedSize
-     * @param lesser - размер минимальной стороны диплома
-     * @param larger - размер максимальной стороны диплома
-     * @param number - заданное количество коров
-     * @param verifiedSize - проверяемое значение возможного размера квадрата стенда
-     * @return true - номер текущей коровы не меньше общего количества коров(значит все вместились)
+     * Метод проверки выполняется ли условие при текущем verifiedSize:
+     * текущее значение томов больше их заданного количества, возвращаем true
+     * @param verifiedSize - проверяемое значение минимально возможного объема(в страницах)
+     *  самого «толстого» тома
+     * @param totalPagesSum - общее количество страниц в романе
+     * @return true - количество томов проверяемого размера
      */
-    private boolean isCorrect(int number, int lesser, int larger, long verifiedSize){
-        //устанавливаем значение счетчика дипломов
-        long currentNumber = 1;
-        //рассчитываем количество дипломов в ряду(по минимальному размеру)
-        long lesserNumber = verifiedSize / lesser;
-        //рассчитываем количество дипломов в колонке(по максимальному размеру)
-        long largerNumber = verifiedSize / larger;
+    private boolean isCondition(long verifiedSize, int totalPagesSum){
+        //устанавливаем значение счетчика томов
+        int currentNumber = 1;
+        //инициируем текущую сумму страниц - не более заданного размера тома
+        int currentPagesSum = 0;
+        //сбрасываем флаг
+        flag = false;
 
-        //вычислем общее количество дипломов, которых возможно разместить в квадрате стенда
-        currentNumber = lesserNumber * largerNumber;
+        //листаем массив - ищем количество томов, к которых можно разместить все главы
+        // при проверяемом размере самого "толстого" тома
+        for (int i = 0; i < chaptersArray.length; i++) {
+            //если элемент больше проверяемого значения сбрасываем флаг и выходим
+            if(chaptersArray[i] > verifiedSize){
+                flag = false;
+                return false;
+            }
 
-        //если текущее значение дипломов не меньше их количества, возвращаем true
-        return currentNumber < number;
+            //прибавляем к текущей сумме значение текущего элемента
+            currentPagesSum += chaptersArray[i];
+
+            //если есть хотя бы одно совпадение, взводим флаг
+            if(currentPagesSum == verifiedSize){
+                flag = true;
+            }
+
+            if(currentPagesSum > verifiedSize){
+                //если текущая сумма больше проверяемого значения тома,
+                //и берем следующий том
+                currentNumber++;
+                //обнуляем текущую сумму
+                currentPagesSum = chaptersArray[i];
+            }
+        }
+        //если текущее значение томов больше их заданного количества, возвращаем true
+        return currentNumber >= tomesNumber;
     }
 
 }
