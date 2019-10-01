@@ -1,5 +1,8 @@
 package lesson1.hw;
 
+import java.io.*;
+import java.util.*;
+
 /**
  * Алгоритмы_и_структуры_данных_на_Java.БазовыйКурс. 24.09.2019 Webinar.
  * Teacher: Фанзиль Кусяпкулов
@@ -38,10 +41,6 @@ package lesson1.hw;
  *  Найти в массиве четное число(четверки) и вывести во вторую строку
  *  Если количество во второй строке не меньше, чем в первой, в третью строку вывести YES, нет - NO.
  */
-
-import java.io.*;
-import java.util.*;
-
 public class Acmp0005 {
     public static void main(String[] args){
         Scanner in = new Scanner(System.in);

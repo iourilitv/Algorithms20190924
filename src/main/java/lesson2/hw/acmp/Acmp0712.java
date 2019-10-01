@@ -1,4 +1,4 @@
-package lesson2.hw;
+package lesson2.hw.acmp;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
