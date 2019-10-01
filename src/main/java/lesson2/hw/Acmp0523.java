@@ -112,8 +112,11 @@ class Task0523 {
             //то возвращаем общее количество страниц в романе
             return totalPagesSum;
         }
-        //если количество томов равны количеству глав
-        if(tomesNumber == chaptersArray.length){
+        //если количество томов равны количеству глав или крайние элементы больше или равны суммы оставшихся
+        if(tomesNumber == chaptersArray.length ||
+                chaptersArray[0] >= totalPagesSum - chaptersArray[0] ||
+                chaptersArray[chaptersArray.length - 1] >= totalPagesSum - chaptersArray[chaptersArray.length - 1]
+        ){
             //то возвращаем максимальное количество страниц в одной главе
             return maxPagesNumber;
         }
