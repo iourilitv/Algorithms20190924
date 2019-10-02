@@ -9,10 +9,7 @@ import java.util.EmptyStackException;
  * Обзор структуры данных. Стек, очередь и приоритетная очередь
  * Домашняя работа.
  * 1. Реализовать рассмотренные структуры данных в консольных программах.
- *  a) Добавить в стек увеличение массива при переполнении стека.
  *  б) Добавить в приоритетную очередь оптимизацию при поиске в отсортированном массиве.
- * 2. Создать программу, которая переворачивает вводимые строки (читает справа налево).
- * 3. Создать класс для реализации дека.
  */
 public class Less3_hw_1b {
     public static void main(String[] args) {
@@ -51,11 +48,23 @@ class MyPriorityQueue<Item extends Comparable> {
         if (isFull()) {
             throw new StackOverflowError();
         }
+        //TODO Added.
+        int sortedMinIndex = -1;
+        int sortedMaxIndex = size + 1;
+
         list[size] = item;
         size++;
         int i = size - 1;
-        while (i > 0 && list[i].compareTo(list[i - 1]) < 0) {
-            swap(i, i - 1);
+
+        while (i > 0 && list[i].compareTo(list[i - 1]) < 0) {//(list[i]/*правый меньше*/ - list[i - 1]) < 0
+
+            //если проверяемый элемент больше индекса максимального элемента в сортированной части на 1
+            if(0 <= list[i].compareTo(list[sortedMaxIndex]) && list[i].compareTo(list[sortedMaxIndex]) <= 1){
+                sortedMaxIndex = i;
+                break;
+            }else{
+                swap(i, i - 1);
+            }
             i--;
         }
     }
@@ -66,7 +75,6 @@ class MyPriorityQueue<Item extends Comparable> {
         list[size] = null;
         return temp;
     }
-
 
     private Item peek() {
         if (isEmpty()) {
