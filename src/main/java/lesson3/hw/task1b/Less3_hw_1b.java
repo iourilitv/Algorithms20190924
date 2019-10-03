@@ -1,4 +1,4 @@
-package lesson3.hw;
+package lesson3.hw.task1b;
 
 import java.util.EmptyStackException;
 

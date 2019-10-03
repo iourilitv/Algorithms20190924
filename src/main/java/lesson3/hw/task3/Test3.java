@@ -2,7 +2,7 @@ package lesson3.hw.task3;
 
 import java.util.Arrays;
 
-public class Test3 {
+class Test3 {
     int size = 8;
     int count = 1;
     MyDEK<Integer> myDEK = new MyDEK<>(size);
@@ -77,7 +77,7 @@ public class Test3 {
     }
 
     //Test1. Добавляем элементы в начало очереди(слева при нормальном порядке)
-    void test1(int edge){
+    private void test1(int edge){
         System.out.println("***Test1. Trying to insert left in right order without looping...***");
         for (int i = 0; i < edge; i++) {
             myDEK.insertLeft(count++);
@@ -88,7 +88,7 @@ public class Test3 {
     }
 
     //Test2. Добавляем элементы в конец очереди(справа при нормальном порядке)
-    void test2(int edge){
+    private void test2(int edge){
         System.out.println("\n***Test2. Trying to insert right in right order without looping...***");
         for (int i = 0; i < edge; i++) {
             myDEK.insertRight(count++);
@@ -99,7 +99,7 @@ public class Test3 {
     }
 
     //Test3. Удаляем элементы из конца очереди(справа при нормальном порядке)
-    void test3(){
+    private void test3(){
         System.out.println("\n***Test3. Trying to remove right without looping...***");
         for (int i = 0; i < 1; i++) {
             System.out.print(myDEK.removeRight() + " ");
@@ -109,7 +109,7 @@ public class Test3 {
     }
 
     //Test4. Удаляем элементы из начала очереди(слева при нормальном порядке)
-    void test4(){
+    private void test4(){
         System.out.println("\n***Test4. Trying to remove left without looping...***");
         for (int i = 0; i < 1; i++) {
             System.out.print(myDEK.removeLeft() + " ");
@@ -120,7 +120,7 @@ public class Test3 {
 
     //Test5. Добавляем элементы в начало очереди(слева при нормальном порядке) с зацикливанием
     //Увеличение массива при обратном порядке очереди
-    void test5(){
+    private void test5(){
         System.out.println("\n***Test5. Trying to insert left in right order with looping...***");
         System.out.println("With array increasing when the queue in reverse order case!");
         int edge = myDEK.size() - myDEK.getQueueLength() + 1;
@@ -133,7 +133,7 @@ public class Test3 {
     }
 
     //Test6. Удаляем элементы из начала очереди(слева при обратном порядке) без зацикливания
-    void test6(){
+    private void test6(){
         System.out.println("\n***Test6. Trying to remove left in reverse order without looping...***");
         for (int i = 0; i < 1; i++) {
             System.out.print(myDEK.removeLeft() + " ");
@@ -143,7 +143,7 @@ public class Test3 {
     }
 
     //Test7. Удаляем элементы из конца очереди(справа при обратном порядке) без зацикливания
-    void test7(){
+    private void test7(){
         System.out.println("\n***Test7. Trying to remove right in reverse order without looping...***");
         for (int i = 0; i < 1; i++) {
             System.out.print(myDEK.removeRight() + " ");
@@ -154,7 +154,7 @@ public class Test3 {
 
     //Test8. Добавляем элементы в конец очереди(справа при обратном порядке) с зацикливанием
     //Увеличение массива при обратном порядке очереди
-    void test8(){
+    private void test8(){
         System.out.println("\n***Test8. Trying to insert right in reverse order with looping...***");
         System.out.println("With array increasing when the queue in reverse order case!");
         int edge = myDEK.size() - myDEK.getQueueLength() + 1;
@@ -168,7 +168,7 @@ public class Test3 {
 
     //Test9. Удаляем элементы из конца очереди(справа при обратном порядке) с зацикливанием
     //Массив должен вернуться к дефолтной вместимости, когда опустошится полностью
-    void test9(){
+    private void test9(){
         System.out.println("\n***Test9. Trying to remove right in reverse order with looping...***");
         System.out.println("With array decreasing when the queue became empty!");
         int edge = (myDEK.getEnd() + 1) + (myDEK.size() - myDEK.getBegin());
@@ -184,7 +184,7 @@ public class Test3 {
     //Test10. Последовательно наполняем массив полностью в прямом порядке без зацикливания(Test1, Test2).
     //Затем добавляем элемент в начало очереди(слева при нормальном порядке) (Test1)
     //Массив должен увеличить вместимость и скопировать элементы текущего массива в прямом порядке
-    void test10(){
+    private void test10(){
         System.out.println("\n***Test10. Trying to insert left in right order without looping...***");
         System.out.println("With array increasing when the queue in reverse order case!");
         //наполняем массив справа в прямом порядке
