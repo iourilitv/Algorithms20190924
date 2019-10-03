@@ -9,8 +9,7 @@ import java.util.EmptyStackException;
  * Урок 3. Стек и очередь.
  * Обзор структуры данных. Стек, очередь и приоритетная очередь
  * Домашняя работа.
- * 2. Создать программу, которая переворачивает вводимые строки (читает справа налево).
- * 3. Создать класс для реализации дека.
+ * DONE 3. Создать класс для реализации дека.
  */
 public class Less3_hw_3 {
     public static void main(String[] args) {
@@ -47,7 +46,8 @@ class MyDEK<Item> {
     public void insertRight(Item item) {
         if (isFull()) {
             //если массив заполнен полностью, увеличиваем его
-            reCapacity(queueLength() + DEFAULT_CAPACITY);
+            //reCapacity(queueLength() + DEFAULT_CAPACITY);//TODO удалить
+            reCapacity(list.length + DEFAULT_CAPACITY);
         }
         //сдвигаем хвост очереди наружу, кроме случая если очередь пустая
         if(!isEmpty()){
@@ -59,7 +59,8 @@ class MyDEK<Item> {
     //добавляем элемент в начало очереди(слева при нормальном порядке)
     public void insertLeft(Item item) {
         if (isFull()) {
-            reCapacity(queueLength() + DEFAULT_CAPACITY);
+            //reCapacity(queueLength() + DEFAULT_CAPACITY);//TODO удалить
+            reCapacity(list.length + DEFAULT_CAPACITY);
         }
         //сдвигаем голову очереди наружу, кроме случая если очередь пустая
         if(!isEmpty()){
@@ -76,6 +77,9 @@ class MyDEK<Item> {
         list[begin] = null;
         //сдвигаем начало внутрь
         begin = shiftBeginInward();
+
+        //FIXME добавить тримминг, если пусто
+        isEmpty();
         return value;
     }
 
@@ -84,6 +88,9 @@ class MyDEK<Item> {
         Item value = peekRight();
         list[end] = null;
         end = shiftEndInward();
+
+        //FIXME добавить тримминг, если пусто
+        isEmpty();
         return value;
     }
 
@@ -114,57 +121,65 @@ class MyDEK<Item> {
         return index != 0 ? index - 1 : list.length - 1;
     }
 
-    //сдвигает начало очереди наружу в зависимости от порядка
+    //сдвигает начало очереди наружу вне зависимости от порядка
     private int shiftBeginOutward(){
-        return isOrder() ? nextLeftIndex(begin) : nextRightIndex(begin);
+        return nextLeftIndex(begin);
     }
 
-    //сдвигает конец очереди наружу в зависимости от порядка
+    //сдвигает конец очереди наружу вне зависимости от порядка
     private int shiftEndOutward(){
-        return isOrder() ? nextRightIndex(end) : nextLeftIndex(end);
+        return nextRightIndex(end);
     }
 
-
-    //сдвигает начало очереди внутрь  в зависимости от порядка
+    //сдвигает начало очереди внутрь вне зависимости от порядка
     private int shiftBeginInward(){
-        return isOrder() ? nextRightIndex(begin) : nextLeftIndex(begin);
+        return nextRightIndex(begin);
     }
 
-    //сдвигает конец очереди внутрь в зависимости от порядка
+    //сдвигает конец очереди внутрь вне зависимости от порядка
     private int shiftEndInward(){
-        return isOrder() ? nextLeftIndex(end) : nextRightIndex(end);
+        return nextLeftIndex(end);
     }
 
     //возвращает длину очереди - ноль, если нет элементов, или положительное, если не ноль
     //при не нулевой очереди всегда end != begin
     private int queueLength() {
         //если индексы начала и конца не равны
-        if(end != begin){
+        if(end != begin && list[begin] != null && list[end] != null){//TODO проверить
             //если есть, возвращаем количество элементов в очереди
             return isOrder() ? end - begin + 1: list.length - begin + end + 1;//e2 b5 = 8 (10 - 5 + 2 + 1)
         } else {//если равны
             //если они указывают на не нулевые элементы
             if (list[begin] != null && list[end] != null) {
-            //if (peekLeft() != null && peekRight() != null) {//TODO удалить
                 //значит в очереди один элемент
                 return 1;
             } else {
                 //если какой-то элемент нулевой, значит в очереди никого нет
                 return 0;
-
-                //если какой-то элемент нулевой выбрасываем исключение//TODO удалить
-                //throw new NullPointerException("There is a null element in the queue!"); //EmptyStackException();
             }
         }
     }
 
     //проверяем не пустой ли массив. Да - длина очереди равна нулю
-    public boolean isEmpty() {
+    //Если пустой, уменьшаем его до дефолтной вместимости
+    private boolean isEmpty() {
+        if(queueLength() == 0 && list.length > DEFAULT_CAPACITY){
+            resetCapacity();
+            return true;
+        }
         return queueLength() == 0;
     }
 
+    //уменьшаем массив до дефолтной вместимости
+    private void resetCapacity() {
+        Item[] tempArr = (Item[]) new Object[DEFAULT_CAPACITY];
+        list = tempArr;
+        //устанавливаем начальные значения начала и конца очереди
+        initDEK();
+    }
+
     //проверяем полностью ли заполнен массив. да - длина очереди равна длине массива
-    public boolean isFull() {
+    private boolean isFull() {
         return queueLength() == list.length;
     }
 
@@ -177,16 +192,29 @@ class MyDEK<Item> {
     //увеличивает массив при полном его заполнении(создает новую копию большего размера)
     private void reCapacity(int newCapacity){
         Item[] tempArr = (Item[]) new Object[newCapacity];
+        //рассчитаваем приращение размера массиа
+        int delta = newCapacity - list.length;
         //если порядок в очереди прямой или длина очереди 1
         if(isOrder()){
-            System.arraycopy(list, begin, tempArr, begin + DEFAULT_CAPACITY / 2, queueLength());
+            System.arraycopy(list, begin, tempArr, begin + delta / 2, queueLength());
+            //FIXME new begin and end
+            //вычисляем новые значения начала и конца очереди
+            begin += delta / 2;
+            end += delta / 2;
         } else {//если порядок очереди обратный
             //копируем левый кусок
-            System.arraycopy(list, 0, tempArr, DEFAULT_CAPACITY / 2, end + 1);
+            System.arraycopy(list, 0, tempArr, 0, end + 1);
             //копируем правый кусок
-            System.arraycopy(list, begin, tempArr, begin + DEFAULT_CAPACITY / 2, list.length - begin + 1);
+            System.arraycopy(list, begin, tempArr, begin + delta, list.length - begin);
+            //вычисляем новые значения начала очереди(индекс конца не меняется)
+            begin += delta;
         }
         list = tempArr;
+    }
+
+    //очистить очередь
+    public void eraseQueue(){
+        resetCapacity();
     }
 
     public Item[] getList() {
@@ -200,5 +228,13 @@ class MyDEK<Item> {
 
     public int getQueueLength() {
         return queueLength();
+    }
+
+    public int getBegin() {
+        return begin;
+    }
+
+    public int getEnd() {
+        return end;
     }
 }
