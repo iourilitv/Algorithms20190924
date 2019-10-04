@@ -7,7 +7,6 @@ public class MyDeque<Item extends Comparable> {
     private final int DEFAULT_CAPACITY = 10;
     private int begin;
     private int end;
-    //TODO Task1b. Добавление оптимизации при поиске в отсортированном массиве.Added
     private int startBeginEnd;
 
     protected MyDeque() {
@@ -23,7 +22,6 @@ public class MyDeque<Item extends Comparable> {
         initDeque();
     }
 
-    //TODO Task1b. Добавление оптимизации при поиске в отсортированном массиве.Added
     protected MyDeque(int capacity, int startBeginEnd) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("bad size " + capacity);
@@ -38,7 +36,6 @@ public class MyDeque<Item extends Comparable> {
         end = begin;
     }
 
-    //TODO Task1b. Добавление оптимизации при поиске в отсортированном массиве.Added
     //Устанавливаем начальные значения индексов начала и конца очереди
     private void initDeque(int startBeginEnd){
         begin = startBeginEnd;
@@ -46,10 +43,9 @@ public class MyDeque<Item extends Comparable> {
     }
 
     //добавляем элемент в конец очереди(справа при нормальном порядке)
-    protected void insertRight(Item item) {
+    void insertRight(Item item) {
         if (isFull()) {
             //если массив заполнен полностью, увеличиваем его
-            //reCapacity(queueLength() + DEFAULT_CAPACITY);//TODO удалить
             reCapacity(list.length + DEFAULT_CAPACITY);
         }
         //сдвигаем хвост очереди наружу, кроме случая если очередь пустая
@@ -62,7 +58,6 @@ public class MyDeque<Item extends Comparable> {
     //добавляем элемент в начало очереди(слева при нормальном порядке)
     void insertLeft(Item item) {
         if (isFull()) {
-            //reCapacity(queueLength() + DEFAULT_CAPACITY);//TODO удалить
             reCapacity(list.length + DEFAULT_CAPACITY);
         }
         //сдвигаем голову очереди наружу, кроме случая если очередь пустая
@@ -91,8 +86,6 @@ public class MyDeque<Item extends Comparable> {
         Item value = peekRight();
         list[end] = null;
         end = shiftEndInward();
-
-        //FIXME добавить тримминг, если пусто
         isEmpty();
         return value;
     }
@@ -129,7 +122,7 @@ public class MyDeque<Item extends Comparable> {
     }
 
     //сдвигает конец очереди наружу вне зависимости от порядка
-    private int shiftEndOutward(){
+    protected int shiftEndOutward(){
         return nextRightIndex(end);
     }
 
@@ -194,7 +187,7 @@ public class MyDeque<Item extends Comparable> {
     //увеличивает массив при полном его заполнении(создает новую копию большего размера)
     protected void reCapacity(int newCapacity){
         Item[] tempArr = (Item[]) new Comparable[newCapacity];
-        //рассчитаваем приращение размера массиа
+        //рассчитаваем приращение размера массива
         int delta = newCapacity - list.length;
         //если порядок в очереди прямой или длина очереди 1
         if(isOrder()){
@@ -222,20 +215,41 @@ public class MyDeque<Item extends Comparable> {
         return list;
     }
 
+    public void setList(Item[] list) {
+        this.list = list;
+    }
+
     //возвращает размер массива
     public int size() {
         return list.length;
     }
 
-    public int getQueueLength() {
+    protected int getQueueLength() {
         return queueLength();
     }
 
-    public int getBegin() {
+    int getBegin() {
         return begin;
     }
 
-    public int getEnd() {
+    protected int getEnd() {
         return end;
+    }
+
+    protected void setEnd(int end) {
+        this.end = end;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < size(); i++) {
+            sb.append(list[i] + " ");
+        }
+        return sb.toString();
+    }
+
+    public int getDEFAULT_CAPACITY() {
+        return DEFAULT_CAPACITY;
     }
 }
