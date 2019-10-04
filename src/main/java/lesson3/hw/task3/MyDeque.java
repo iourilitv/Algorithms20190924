@@ -249,7 +249,12 @@ public class MyDeque<Item extends Comparable> {
         return sb.toString();
     }
 
-    public int getDEFAULT_CAPACITY() {
+    protected int getDEFAULT_CAPACITY() {
         return DEFAULT_CAPACITY;
+    }
+
+    //возвращает разницу значений целочисленных элементов
+    public int compareTo(Item bigger, Item smaller){
+        return (Integer)bigger - (Integer)smaller;
     }
 }

@@ -3,7 +3,9 @@ package lesson3.hw.task1b;
 import lesson3.hw.task3.MyDeque;
 
 class MyPriorityQueue<Item extends Comparable> extends MyDeque {
-    //private Item[] list = (Item[])super.getList();
+    //индекс самого большого отсортированного элемента
+    private int maxSortedIndex = 0;
+    private Item maxSortedItem;
 
     public MyPriorityQueue() {
         super();
@@ -14,20 +16,60 @@ class MyPriorityQueue<Item extends Comparable> extends MyDeque {
     }
 
     void insert(Item item) {
+        //добавляем элемент в конец очереди
         insertRightInternal(item);
+        //сортируем очередь в соотвествии с приоритетом(самое большое справа)
+        sortQueueByPriority();
+    }
 
-        int i = getEnd();
-        while (i > 0 && getList()[i].compareTo(getList()[i - 1]) < 0) {//правый меньше левого < 0
-            swap(i, i - 1);
-            i--;
+    //добавляем элемент в конец очереди(справа при нормальном порядке)
+    private void insertRightInternal(Item item) {
+        if (isFull()) {
+            //если массив заполнен полностью, увеличиваем его
+            reCapacity(getList().length + getDEFAULT_CAPACITY());
         }
+        //сдвигаем хвост очереди наружу, кроме случая если очередь пустая
+        if(!isEmpty()){
+            setEnd(shiftEnd());
+        }
+        getList()[getEnd()] = item;
+    }
 
-        /*int sortedMinIndex = -1;
-        int sortedMaxIndex = size + 1;
+    //сортируем очередь в соотвествии с приоритетом(самое большое справа)
+    private void sortQueueByPriority(){
+        int i = getEnd();
+        int currentSortedIndex = maxSortedIndex;
+        //максимальный элемент диапазона отсортированных элементов отличающихся на 1
+        maxSortedItem = (Item)getList()[maxSortedIndex];
+        //листаем всю очередь
+        while (i > 0) {
+            System.out.println("compareTo: " + getList()[i].compareTo(maxSortedItem));
 
-        list[size] = item;
-        size++;
-        int i = size - 1;
+            while (getList()[i].compareTo(getList()[i - 1]) < 0) {//правый меньше левого < 0
+                swap(i, i - 1);
+                i--;
+            }
+
+            /*//если проверяемый элемент больше максимального отсортированного элемента на 1
+            if (getList()[i].compareTo(maxSortedItem) == 1) {//< 0
+                //ищем совпадение и меняем
+                while (getList()[i].compareTo(getList()[i - 1]) < 0) {//правый меньше левого < 0
+                    swap(i, i - 1);
+                    i--;
+                }
+            } else{
+                //если правый(новый элемент) больше меняем индекс маскимального отсортированного элемента
+                maxSortedIndex = i;
+                //и выходим
+                return;
+            }*/
+        }
+        /*//после полной проверки обновляем индекс маскимального отсортированного элемента
+        if(currentSortedIndex < maxSortedIndex){
+            maxSortedIndex = currentSortedIndex;
+        }*/
+
+        /*
 
         while (i > 0 && list[i].compareTo(list[i - 1]) < 0) {//(list[i]//правый меньше// - list[i - 1]) < 0
 
@@ -42,17 +84,10 @@ class MyPriorityQueue<Item extends Comparable> extends MyDeque {
         }*/
     }
 
-    //добавляем элемент в конец очереди(справа при нормальном порядке)
-    private void insertRightInternal(Item item) {
-        if (isFull()) {
-            //если массив заполнен полностью, увеличиваем его
-            reCapacity(getList().length + getDEFAULT_CAPACITY());
-        }
-        //сдвигаем хвост очереди наружу, кроме случая если очередь пустая
-        if(!isEmpty()){
-            setEnd(shiftEnd());
-        }
-        getList()[getEnd()] = item;
+    //проверяем лежит ли
+    private boolean isInSortedItemsDiapason(Item item) {
+
+        return false;
     }
 
     public Item remove() {
@@ -98,6 +133,5 @@ class MyPriorityQueue<Item extends Comparable> extends MyDeque {
     private int shiftEnd(){
         return super.shiftEndOutward();
     }
-
 
 }
