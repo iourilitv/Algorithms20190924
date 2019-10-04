@@ -3,7 +3,6 @@ package lesson3.hw.task1b;
 import lesson3.hw.task3.MyDeque;
 
 class MyPriorityQueue<Item extends Comparable> extends MyDeque {
-    //private Item[] list = (Item[])super.getList();
 
     public MyPriorityQueue() {
         super();
@@ -22,24 +21,6 @@ class MyPriorityQueue<Item extends Comparable> extends MyDeque {
             i--;
         }
 
-        /*int sortedMinIndex = -1;
-        int sortedMaxIndex = size + 1;
-
-        list[size] = item;
-        size++;
-        int i = size - 1;
-
-        while (i > 0 && list[i].compareTo(list[i - 1]) < 0) {//(list[i]//правый меньше// - list[i - 1]) < 0
-
-            //если проверяемый элемент больше индекса максимального элемента в сортированной части на 1
-            if(0 <= list[i].compareTo(list[sortedMaxIndex]) && list[i].compareTo(list[sortedMaxIndex]) <= 1){
-                sortedMaxIndex = i;
-                break;
-            }else{
-                swap(i, i - 1);
-            }
-            i--;
-        }*/
     }
 
     //добавляем элемент в конец очереди(справа при нормальном порядке)
@@ -101,3 +82,22 @@ class MyPriorityQueue<Item extends Comparable> extends MyDeque {
 
 
 }
+
+        /*int sortedMinIndex = -1;
+        int sortedMaxIndex = size + 1;
+
+        list[size] = item;
+        size++;
+        int i = size - 1;
+
+        while (i > 0 && list[i].compareTo(list[i - 1]) < 0) {//(list[i]//правый меньше// - list[i - 1]) < 0
+
+            //если проверяемый элемент больше индекса максимального элемента в сортированной части на 1
+            if(0 <= list[i].compareTo(list[sortedMaxIndex]) && list[i].compareTo(list[sortedMaxIndex]) <= 1){
+                sortedMaxIndex = i;
+                break;
+            }else{
+                swap(i, i - 1);
+            }
+            i--;
+        }*/

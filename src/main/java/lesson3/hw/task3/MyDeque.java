@@ -14,7 +14,7 @@ public class MyDeque<Item extends Comparable> {
         initDeque();
     }
 
-    protected MyDeque(int capacity) {
+    MyDeque(int capacity) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("bad size " + capacity);
         }
@@ -249,7 +249,7 @@ public class MyDeque<Item extends Comparable> {
         return sb.toString();
     }
 
-    public int getDEFAULT_CAPACITY() {
+    protected int getDEFAULT_CAPACITY() {
         return DEFAULT_CAPACITY;
     }
 }

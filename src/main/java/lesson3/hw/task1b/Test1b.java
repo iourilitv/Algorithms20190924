@@ -28,17 +28,6 @@ class Test1b {
         //8 7 0
         //After Test3. 0 random priority elements have been inserted: array length: 15
         //[0, 0, 2, 5, 7, 8, null, null, null, null, null, null, null, null, null]
-
-        //Test4. Добавляем элемента в начало очереди(слева при нормальном порядке) (Test1)
-        //Массив должен увеличить вместимость и скопировать элементы текущего массива в прямом порядке
-        //test4();//OK
-        //After Test10. Filling array in right order: array length: 10
-        //[33, 32, 31, 30, 29, 24, 25, 26, 27, 28]
-        //34
-        //After Test1. Inserting left: array length: 20
-        //[null, null, null, null, 34, 33, 32, 31, 30, 29, 24, 25, 26, 27, 28, null, null, null, null, null]
-
-
     }
 
     //Test1. Добавляем элементы в конец очереди
@@ -95,3 +84,15 @@ class Test1b {
     }
 
 }
+
+
+//Test4. Добавляем элемента в начало очереди(слева при нормальном порядке) (Test1)
+//Массив должен увеличить вместимость и скопировать элементы текущего массива в прямом порядке
+//test4();//OK
+//After Test10. Filling array in right order: array length: 10
+//[33, 32, 31, 30, 29, 24, 25, 26, 27, 28]
+//34
+//After Test1. Inserting left: array length: 20
+//[null, null, null, null, 34, 33, 32, 31, 30, 29, 24, 25, 26, 27, 28, null, null, null, null, null]
+
+
