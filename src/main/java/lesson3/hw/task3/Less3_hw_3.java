@@ -1,6 +1,5 @@
 package lesson3.hw.task3;
 
-import java.util.Arrays;
 import java.util.EmptyStackException;
 
 /**
@@ -17,13 +16,13 @@ public class Less3_hw_3 {
     }
 }
 
-class MyDEK<Item> {
+class MyDeque<Item> {
     private Item[] list;
     private final int DEFAULT_CAPACITY = 10;
     private int begin;
     private int end;
 
-    public MyDEK(int capacity) {
+    MyDeque(int capacity) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("bad size " + capacity);
         }
@@ -31,19 +30,19 @@ class MyDEK<Item> {
         initDEK();
     }
 
-    public MyDEK() {
+    public MyDeque() {
         list = (Item[]) new Object[DEFAULT_CAPACITY];
         initDEK();
     }
 
     //Устанавливаем начальные значения индексов начала и конца очереди
-    private void initDEK(){
+    void initDEK(){
         begin = list.length / 2;
         end = begin;
     }
 
     //добавляем элемент в конец очереди(справа при нормальном порядке)
-    public void insertRight(Item item) {
+    void insertRight(Item item) {
         if (isFull()) {
             //если массив заполнен полностью, увеличиваем его
             //reCapacity(queueLength() + DEFAULT_CAPACITY);//TODO удалить
@@ -57,7 +56,7 @@ class MyDEK<Item> {
     }
 
     //добавляем элемент в начало очереди(слева при нормальном порядке)
-    public void insertLeft(Item item) {
+    void insertLeft(Item item) {
         if (isFull()) {
             //reCapacity(queueLength() + DEFAULT_CAPACITY);//TODO удалить
             reCapacity(list.length + DEFAULT_CAPACITY);
@@ -70,7 +69,7 @@ class MyDEK<Item> {
     }
 
     //удаляем элемент из начала очереди(левый при нормальном порядке)
-    public Item removeLeft() {
+    Item removeLeft() {
         //запоимнаем элемент в начале очереди
         Item value = peekLeft();
         //обнуляем ссылку на объект в ячейке элемента
@@ -84,7 +83,7 @@ class MyDEK<Item> {
     }
 
     //удаляем элемент из конца очереди(правый при нормальном порядке)
-    public Item removeRight() {
+    Item removeRight() {
         Item value = peekRight();
         list[end] = null;
         end = shiftEndInward();
@@ -95,7 +94,7 @@ class MyDEK<Item> {
     }
 
     //читаем элемент в начале очереди(левый при нормальном порядке)
-    public Item peekLeft() {
+    Item peekLeft() {
         if (isEmpty()) {
             throw new EmptyStackException();
         }
@@ -104,7 +103,7 @@ class MyDEK<Item> {
 
 
     //читаем элемент в конце очереди(правый при нормальном порядке)
-    public Item peekRight() {
+    Item peekRight() {
         if (isEmpty()) {
             throw new EmptyStackException();
         }
@@ -145,7 +144,7 @@ class MyDEK<Item> {
     //при не нулевой очереди всегда end != begin
     private int queueLength() {
         //если индексы начала и конца не равны
-        if(end != begin && list[begin] != null && list[end] != null){//TODO проверить
+        if(end != begin && list[begin] != null && list[end] != null){
             //если есть, возвращаем количество элементов в очереди
             return isOrder() ? end - begin + 1: list.length - begin + end + 1;//e2 b5 = 8 (10 - 5 + 2 + 1)
         } else {//если равны

@@ -5,7 +5,7 @@ import java.util.Arrays;
 class Test3 {
     int size = 8;
     int count = 1;
-    MyDEK<Integer> myDEK = new MyDEK<>(size);
+    MyDeque<Integer> myDeque = new MyDeque<>(size);
 
     void run(){
         //Test1. Добавляем элементы в начало очереди(слева при нормальном порядке)
@@ -80,42 +80,42 @@ class Test3 {
     private void test1(int edge){
         System.out.println("***Test1. Trying to insert left in right order without looping...***");
         for (int i = 0; i < edge; i++) {
-            myDEK.insertLeft(count++);
-            System.out.print(myDEK.peekLeft() + " ");
+            myDeque.insertLeft(count++);
+            System.out.print(myDeque.peekLeft() + " ");
         }
-        System.out.println("\nAfter Test1. Inserting left: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test1. Inserting left: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 
     //Test2. Добавляем элементы в конец очереди(справа при нормальном порядке)
     private void test2(int edge){
         System.out.println("\n***Test2. Trying to insert right in right order without looping...***");
         for (int i = 0; i < edge; i++) {
-            myDEK.insertRight(count++);
-            System.out.print(myDEK.peekRight() + " ");
+            myDeque.insertRight(count++);
+            System.out.print(myDeque.peekRight() + " ");
         }
-        System.out.println("\nAfter Test2. Inserting right: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test2. Inserting right: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 
     //Test3. Удаляем элементы из конца очереди(справа при нормальном порядке)
     private void test3(){
         System.out.println("\n***Test3. Trying to remove right without looping...***");
         for (int i = 0; i < 1; i++) {
-            System.out.print(myDEK.removeRight() + " ");
+            System.out.print(myDeque.removeRight() + " ");
         }
-        System.out.println("\nAfter Test3. Removing right: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test3. Removing right: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 
     //Test4. Удаляем элементы из начала очереди(слева при нормальном порядке)
     private void test4(){
         System.out.println("\n***Test4. Trying to remove left without looping...***");
         for (int i = 0; i < 1; i++) {
-            System.out.print(myDEK.removeLeft() + " ");
+            System.out.print(myDeque.removeLeft() + " ");
         }
-        System.out.println("\nAfter Test4. Removing left: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test4. Removing left: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 
     //Test5. Добавляем элементы в начало очереди(слева при нормальном порядке) с зацикливанием
@@ -123,33 +123,33 @@ class Test3 {
     private void test5(){
         System.out.println("\n***Test5. Trying to insert left in right order with looping...***");
         System.out.println("With array increasing when the queue in reverse order case!");
-        int edge = myDEK.size() - myDEK.getQueueLength() + 1;
+        int edge = myDeque.size() - myDeque.getQueueLength() + 1;
         for (int i = 0; i < edge; i++) {
-            myDEK.insertLeft(count++);
-            System.out.print(myDEK.peekLeft() + " ");
+            myDeque.insertLeft(count++);
+            System.out.print(myDeque.peekLeft() + " ");
         }
-        System.out.println("\nAfter Test5. Inserting left: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test5. Inserting left: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 
     //Test6. Удаляем элементы из начала очереди(слева при обратном порядке) без зацикливания
     private void test6(){
         System.out.println("\n***Test6. Trying to remove left in reverse order without looping...***");
         for (int i = 0; i < 1; i++) {
-            System.out.print(myDEK.removeLeft() + " ");
+            System.out.print(myDeque.removeLeft() + " ");
         }
-        System.out.println("\nAfter Test6. Removing left: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test6. Removing left: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 
     //Test7. Удаляем элементы из конца очереди(справа при обратном порядке) без зацикливания
     private void test7(){
         System.out.println("\n***Test7. Trying to remove right in reverse order without looping...***");
         for (int i = 0; i < 1; i++) {
-            System.out.print(myDEK.removeRight() + " ");
+            System.out.print(myDeque.removeRight() + " ");
         }
-        System.out.println("\nAfter Test7. Removing right: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test7. Removing right: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 
     //Test8. Добавляем элементы в конец очереди(справа при обратном порядке) с зацикливанием
@@ -157,13 +157,13 @@ class Test3 {
     private void test8(){
         System.out.println("\n***Test8. Trying to insert right in reverse order with looping...***");
         System.out.println("With array increasing when the queue in reverse order case!");
-        int edge = myDEK.size() - myDEK.getQueueLength() + 1;
+        int edge = myDeque.size() - myDeque.getQueueLength() + 1;
         for (int i = 0; i < edge; i++) {
-            myDEK.insertRight(count++);
-            System.out.print(myDEK.peekRight() + " ");
+            myDeque.insertRight(count++);
+            System.out.print(myDeque.peekRight() + " ");
         }
-        System.out.println("\nAfter Test8. Inserting right: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test8. Inserting right: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 
     //Test9. Удаляем элементы из конца очереди(справа при обратном порядке) с зацикливанием
@@ -171,14 +171,14 @@ class Test3 {
     private void test9(){
         System.out.println("\n***Test9. Trying to remove right in reverse order with looping...***");
         System.out.println("With array decreasing when the queue became empty!");
-        int edge = (myDEK.getEnd() + 1) + (myDEK.size() - myDEK.getBegin());
+        int edge = (myDeque.getEnd() + 1) + (myDeque.size() - myDeque.getBegin());
         for (int i = 0; i < edge; i++) {
-            int temp = myDEK.removeRight();
+            int temp = myDeque.removeRight();
             //System.out.print(myDEK.removeRight() + " ");
             System.out.print(temp + " ");
         }
-        System.out.println("\nAfter Test9. Removing right: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test9. Removing right: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 
     //Test10. Последовательно наполняем массив полностью в прямом порядке без зацикливания(Test1, Test2).
@@ -191,12 +191,12 @@ class Test3 {
         test2(5);
         //наполняем массив слева в прямом порядке
         test1(5);
-        System.out.println("\nAfter Test10. Filling array in right order: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test10. Filling array in right order: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
         //наполняем массив слева в прямом порядке
         test1(1);
 
-        System.out.println("\nAfter Test10. Inserting left: array length: " + myDEK.size());
-        System.out.println(Arrays.toString(myDEK.getList()));
+        System.out.println("\nAfter Test10. Inserting left: array length: " + myDeque.size());
+        System.out.println(Arrays.toString(myDeque.getList()));
     }
 }
