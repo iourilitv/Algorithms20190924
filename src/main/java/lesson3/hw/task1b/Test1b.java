@@ -9,10 +9,6 @@ class Test1b {
     MyPriorityQueue<Integer> mpq = new MyPriorityQueue<>(5);
     private Random random = new Random();
 
-    void runTest(){
-        test1(1);
-    }
-
     void run(){
         //Test1. Добавляем элементы в конец очереди без переполнения
         test1(5);//OK
