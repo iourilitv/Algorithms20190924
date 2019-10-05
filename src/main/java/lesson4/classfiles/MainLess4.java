@@ -10,16 +10,16 @@ import java.util.Iterator;
  */
 public class MainLess4 {
     public static void main(String[] args) {
-        MyLinkedList<String> mll = new MyLinkedList<>();
+       MyLinkedList<String> mll = new MyLinkedList<>();
 
-        mll.insertFirst("Katia");
-        mll.insertFirst("Maria");
-        mll.insertFirst("Lyba");
+       mll.insertFirst("Katia");
+       mll.insertFirst("Maria");
+       mll.insertFirst("Lyba");
 
-        System.out.println(mll);
+       System.out.println(mll);
 
-        mll.insertLast("Petia");
-        System.out.println(mll);
+       mll.insertLast("Petia");
+       System.out.println(mll);
 
 //        System.out.println(mll.removeFirst());
 //        System.out.println(mll);
