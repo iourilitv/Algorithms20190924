@@ -3,15 +3,17 @@ package lesson3.hw.task1b;
 import lesson3.hw.task3.MyDeque;
 
 class MyPriorityQueue<Item extends Comparable> extends MyDeque {
+    private static final int DEFAULT_CAPACITY = 10;
 
-    public MyPriorityQueue() {
-        super();
+    MyPriorityQueue() {
+        super(DEFAULT_CAPACITY, 0);
     }
 
     public MyPriorityQueue(int capacity) {
         super(capacity, 0);
     }
 
+    //Добавляем элемент с одновременной сортировкой по приоритету
     void insert(Item item) {
         insertRightInternal(item);
 
@@ -31,13 +33,27 @@ class MyPriorityQueue<Item extends Comparable> extends MyDeque {
         }
         //сдвигаем хвост очереди наружу, кроме случая если очередь пустая
         if(!isEmpty()){
-            setEnd(shiftEnd());
+            setEnd(shiftEndOutward());
         }
         getList()[getEnd()] = item;
     }
 
+    //удаляем элемент из очереди
     public Item remove() {
-        return (Item)super.removeRight();
+        return (Item)removeRightInternal();
+    }
+
+    //удаляем элемент из конца очереди
+    private Item removeRightInternal() {
+        Item value = (Item)peekRight();
+        getList()[getEnd()] = null;
+
+        if(getEnd() <= 0){
+            isEmpty();//чтобы уменьшить вместимость пустого массив
+        }else {
+            setEnd(shiftEndInward());
+        }
+        return value;
     }
 
     Item peek() {
@@ -53,7 +69,6 @@ class MyPriorityQueue<Item extends Comparable> extends MyDeque {
         return super.isEmpty();
     }
 
-    @Override
     public boolean isFull() {
         return super.isFull();
     }
@@ -62,9 +77,6 @@ class MyPriorityQueue<Item extends Comparable> extends MyDeque {
     @Override
     protected void reCapacity(int newCapacity){
         Item[] tempArr = (Item[]) new Comparable[newCapacity];
-        //рассчитаваем приращение размера массиа
-        //int delta = newCapacity - list.length;
-        //если порядок в очереди прямой или длина очереди 1
         System.arraycopy(getList(), 0, tempArr, 0, getQueueLength());
         super.setList(tempArr);
     }
@@ -76,11 +88,19 @@ class MyPriorityQueue<Item extends Comparable> extends MyDeque {
     }
 
     //сдвигает конец очереди наружу вне зависимости от порядка
-    private int shiftEnd(){
+    protected int shiftEndOutward(){
         return super.shiftEndOutward();
     }
 
+    //сдвигает конец очереди наружу вне зависимости от порядка
+    protected int shiftEndInward(){
+        return super.shiftEndInward();
+    }
 
+
+    public int getQueueLength() {
+        return super.queueLength();
+    }
 }
 
         /*int sortedMinIndex = -1;

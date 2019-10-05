@@ -19,6 +19,7 @@ public class MyDeque<Item extends Comparable> {
             throw new IllegalArgumentException("bad size " + capacity);
         }
         list = (Item[]) new Comparable[capacity];
+        this.startBeginEnd = list.length / 2;
         initDeque();
     }
 
@@ -27,17 +28,12 @@ public class MyDeque<Item extends Comparable> {
             throw new IllegalArgumentException("bad size " + capacity);
         }
         list = (Item[]) new Comparable[capacity];
-        initDeque(startBeginEnd);
+        this.startBeginEnd = startBeginEnd;
+        initDeque();
     }
 
     //Устанавливаем начальные значения индексов начала и конца очереди по умолчанию
     private void initDeque(){
-        begin = list.length / 2;
-        end = begin;
-    }
-
-    //Устанавливаем начальные значения индексов начала и конца очереди
-    private void initDeque(int startBeginEnd){
         begin = startBeginEnd;
         end = begin;
     }
@@ -75,14 +71,12 @@ public class MyDeque<Item extends Comparable> {
         list[begin] = null;
         //сдвигаем начало внутрь
         begin = shiftBeginInward();
-
-        //FIXME добавить тримминг, если пусто
         isEmpty();
         return value;
     }
 
     //удаляем элемент из конца очереди(правый при нормальном порядке)
-    protected Item removeRight() {
+    Item removeRight() {
         Item value = peekRight();
         list[end] = null;
         end = shiftEndInward();
@@ -132,13 +126,13 @@ public class MyDeque<Item extends Comparable> {
     }
 
     //сдвигает конец очереди внутрь вне зависимости от порядка
-    private int shiftEndInward(){
+    protected int shiftEndInward(){
         return nextLeftIndex(end);
     }
 
     //возвращает длину очереди - ноль, если нет элементов, или положительное, если не ноль
     //при не нулевой очереди всегда end != begin
-    private int queueLength() {
+    protected int queueLength() {
         //если индексы начала и конца не равны
         if(end != begin && list[begin] != null && list[end] != null){
             //если есть, возвращаем количество элементов в очереди

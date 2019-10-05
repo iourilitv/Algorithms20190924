@@ -6,28 +6,45 @@ import java.util.Random;
 class Test1b {
     int size = 8;
     int count;
-    MyPriorityQueue<Integer> mpq = new MyPriorityQueue<>(5);
+
+    //MyPriorityQueue<Integer> mpq = new MyPriorityQueue<>(5);
+    MyPriorityQueue<Integer> mpq = new MyPriorityQueue<>();
+
     private Random random = new Random();
 
     void run(){
         //Test1. Добавляем элементы в конец очереди без переполнения
         test1(5);//OK
-        //0 6 9 2 5
-        //After Test1. 5 random priority elements have been Inserted: array length: 5
-        //[0, 2, 5, 6, 9]
+        //2 0 6 9 9
+        //After Test1. 5 random priority elements have been inserted: array length: 5
+        //[0, 2, 6, 9, 9]
 
         //Test2. Удаляем элементы из конца очереди
         test2();//OK
-        //9 6
+        //9 9
         //After Test2. Removed some elements with highest priority: array length: 5
-        //[0, 2, 5, null, null]
+        //[0, 2, 6, null, null]
 
         //Test3. Добавляем элементы в конец очереди с переполнением
         //Массив должен увеличить вместимость и скопировать элементы текущего массива
         test3(3);//OK
-        //8 7 0
-        //After Test3. 0 random priority elements have been inserted: array length: 15
-        //[0, 0, 2, 5, 7, 8, null, null, null, null, null, null, null, null, null]
+        //1 0 6
+        //After Test3. 6 random priority elements have been inserted: array length: 15
+        //[0, 0, 1, 2, 6, 6, null, null, null, null, null, null, null, null, null]
+        test3(5);
+
+        //Test4. Удаляем все элементы из очереди
+        //Массив должен вернуться к дефолтной вместимости, когда опустошится полностью
+        test4();//OK
+        //6 6 2 1 0 0
+        //After Test4. Removed all elements: array length: 10
+        //[null, null, null, null, null, null, null, null, null, null]
+
+        test1(1);//OK
+        //8
+        //After Test1. 1 random priority elements have been inserted: array length: 10
+        //[8, null, null, null, null, null, null, null, null, null]
+
     }
 
     //Test1. Добавляем элементы в конец очереди
@@ -38,9 +55,8 @@ class Test1b {
             System.out.print(count + " ");
             mpq.insert(count);
         }
-        System.out.println("\nAfter Test1. " + count + " random priority elements have been Inserted: array length: " + mpq.size());
+        System.out.println("\nAfter Test1. " + edge + " random priority elements have been inserted: array length: " + mpq.size());
         System.out.println(Arrays.toString(mpq.getList()));
-        //System.out.println(mpq.toString());
     }
 
     //Test2. Удаляем элементы из конца очереди
@@ -63,36 +79,22 @@ class Test1b {
             mpq.insert(count);
         }
         System.out.println("\nAfter Test3. " + count + " random priority elements have been inserted: array length: " + mpq.size());
-        //System.out.println(mpq.toString());
         System.out.println(Arrays.toString(mpq.getList()));
     }
 
-    //Test10. Последовательно наполняем массив полностью в прямом порядке без зацикливания(Test1, Test2).
-    //Затем добавляем элемент в начало очереди(слева при нормальном порядке) (Test1)
-    //Массив должен увеличить вместимость и скопировать элементы текущего массива в прямом порядке
+
+    //Test4. Удаляем все элементы из очереди
+    //Массив должен вернуться к дефолтной вместимости, когда опустошится полностью
     private void test4(){
-        System.out.println("\n***Test10. Trying to insert left in right order without looping...***");
-        System.out.println("With array increasing when the queue in reverse order case!");
-        //наполняем массив справа в прямом порядке
-        //test2(5);
-
-        System.out.println("\nAfter Test10. Filling array in right order: array length: " + mpq.size());
-        System.out.println(mpq.toString());
-
-        System.out.println("\nAfter Test10. Inserting left: array length: " + mpq.size());
-        System.out.println(mpq.toString());
+        System.out.println("\n***Test4. Trying to remove all elements...***");
+        System.out.println("With array decreasing when the queue became empty!");
+        int edge = mpq.getQueueLength();
+        for (int i = 0; i < edge; i++) {
+            int temp = mpq.remove();
+            System.out.print(temp + " ");
+        }
+        System.out.println("\nAfter Test4. Removed all elements: array length: " + mpq.size());
+        System.out.println(Arrays.toString(mpq.getList()));
     }
 
 }
-
-
-//Test4. Добавляем элемента в начало очереди(слева при нормальном порядке) (Test1)
-//Массив должен увеличить вместимость и скопировать элементы текущего массива в прямом порядке
-//test4();//OK
-//After Test10. Filling array in right order: array length: 10
-//[33, 32, 31, 30, 29, 24, 25, 26, 27, 28]
-//34
-//After Test1. Inserting left: array length: 20
-//[null, null, null, null, 34, 33, 32, 31, 30, 29, 24, 25, 26, 27, 28, null, null, null, null, null]
-
-
