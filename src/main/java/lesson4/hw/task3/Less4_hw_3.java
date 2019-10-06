@@ -6,8 +6,7 @@ package lesson4.hw.task3;
  * Урок 4. Связанные списки.
  * Учимся создавать и использовать списки.
  * Домашняя работа.
- * 3. Реализовать класс Очередь.
- * 4* Реализовать ListIterator ( Необязательно )
+ * DOME 3. Реализовать класс Очередь.
  */
 public class Less4_hw_3 {
     public static void main(String[] args) {
