@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.Random;
 
 class TestL4_2 {
-    int size = 8;
-    int count;
     private Random random = new Random();
     MyLinkedList<String> mll = new MyLinkedList<>();
 
@@ -35,6 +33,15 @@ class TestL4_2 {
         //Test6. Тест итератора. Выводим элементы связанного списка
         test6();//
         //
+
+        //Как правило, итераторы содержат следующие методы:
+        //● reset() — перемещение в начало списка;
+        //● nextLink() — перемещение итератора к следующему элементу;
+        //● getCurrent() — получение элемента, на который указывает итератор;
+        //● atEnd() — возвращает true , если итератор находится в конце списка;
+        //● insertAfter() — вставка элемента после итератора;
+        //● insertBefore() — вставка элемента до итератора;
+        //● deleteCurrent() — удаление элемента в текущей позиции итератора.
     }
 
     //Test1. Добавляем элементы в начало связанного списка
