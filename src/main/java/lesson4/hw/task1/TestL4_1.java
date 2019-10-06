@@ -87,11 +87,9 @@ class TestL4_1 {
 
     //Test6. Тест итератора. Выводим элементы связанного списка
     private void test6(){
-        int index = 1;
         System.out.println("\n***Test6. Trying to test iterator...***");
-        Iterator<String> iterator = mll.iterator();
-        while(iterator.hasNext()){
-            System.out.print(iterator.next()+" ");
+        for (String s : mll) {
+            System.out.print(s + " ");
         }
     }
 

@@ -22,11 +22,14 @@ public class MyLinkedList<Item> implements Iterable<Item> {
      */
     private class Iter implements Iterator<Item>{
         Node current = new Node(null,first);
+
+        //возвращает true, если есть следующий элемент
         @Override
         public boolean hasNext() {
             return current.getNext() != null;
         }
 
+        //сдвигает текущий элемент на следующую позицию вправо
         @Override
         public Item next() {
             current = current.next;
