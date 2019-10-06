@@ -36,7 +36,6 @@ class TestL4_2 {
 
         //Как правило, итераторы содержат следующие методы:
         //● reset() — перемещение в начало списка;
-        //● nextLink() — перемещение итератора к следующему элементу;
         //● getCurrent() — получение элемента, на который указывает итератор;
         //● atEnd() — возвращает true , если итератор находится в конце списка;
         //● insertAfter() — вставка элемента после итератора;
@@ -91,11 +90,9 @@ class TestL4_2 {
 
     //Test6. Тест итератора. Выводим элементы связанного списка
     private void test6(){
-        int index = 1;
         System.out.println("\n***Test6. Trying to test iterator...***");
-        Iterator<String> iterator = mll.iterator();
-        while(iterator.hasNext()){
-            System.out.print(iterator.next()+" ");
+        for (String s : mll) {
+            System.out.print(s + " ");
         }
     }
 
