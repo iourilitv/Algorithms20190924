@@ -17,6 +17,9 @@ public class MyLinkedList<Item> implements Iterable<Item> {
         return new Iter();
     }
 
+    /**
+     * Внутренний класс итератора
+     */
     private class Iter implements Iterator<Item>{
         Node current = new Node(null,first);
         @Override
@@ -31,6 +34,9 @@ public class MyLinkedList<Item> implements Iterable<Item> {
         }
     }
 
+    /**
+     * Внутренний класс элемента ссылочного списка
+     */
     class Node<Item> {
         private Item value;
         private Node next;
@@ -220,10 +226,12 @@ public class MyLinkedList<Item> implements Iterable<Item> {
     public String toString() {
         Node current = first;
         StringBuilder sb = new StringBuilder();
+        sb.append("[");
         while (current != null) {
-            sb.append(current.getValue() + ", ");
+            sb.append(current.getValue()).append(", ");
             current = current.next;
         }
+        sb.replace(sb.length() - 2, sb.length(), "]");
         return sb.toString();
     }
 }

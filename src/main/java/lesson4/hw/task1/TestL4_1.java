@@ -4,8 +4,6 @@ import java.util.Iterator;
 import java.util.Random;
 
 class TestL4_1 {
-    int size = 8;
-    int count;
     private Random random = new Random();
     MyLinkedList<String> mll = new MyLinkedList<>();
 
