@@ -6,9 +6,11 @@ public class MyLinkedStack<T> {
     public void push(T value){
         stack.insertFirst(value);
     }
+
     public T pop(){
         return stack.removeFirst();
     }
+
     public T peek(){
         return stack.getFirst();
     }
