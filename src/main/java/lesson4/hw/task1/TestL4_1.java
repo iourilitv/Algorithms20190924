@@ -6,6 +6,9 @@ import java.util.Random;
 class TestL4_1 {
     private Random random = new Random();
     MyLinkedList<String> mll = new MyLinkedList<>();
+    //TODO Если его определить здесь, то вызываться методы встроенного Iterator
+    //Инициализировать нужно локально
+    //Iterator<String> iter = mll.iterator();
 
     void run(){
         //Test1. Добавляем элементы в начало связанного списка
@@ -37,7 +40,21 @@ class TestL4_1 {
 
         //Test6. Тест итератора. Выводим элементы связанного списка
         test6();//OK
-        //Maria Vasia Katia
+        //***Test2.1. Using foreach...***
+        //Maria true, Vasia true, Katia true,
+        //***Test6.2. Using while...***
+        //Maria true, Vasia true, Katia false,
+
+        //Test7. Тест итератора. Удаляем элементы, начинающиеся на "V" из связанного списка
+        //с помощью цикла while
+        test7();//OK
+        //After Test7. The element Vasia have been removed
+        //Maria Katia
+
+        //Test8. Тест итератора. Удаляем элементы, равный на "Maria" из связанного списка
+        //с помощью цикла foreach//TODO Не должно работать?
+        //test8();//
+
     }
 
     //Test1. Добавляем элементы в начало связанного списка
@@ -87,11 +104,62 @@ class TestL4_1 {
 
     //Test6. Тест итератора. Выводим элементы связанного списка
     private void test6(){
+        Iterator<String> iter = mll.iterator();
         System.out.println("\n***Test6. Trying to test iterator...***");
+        System.out.println("***Test6.1. Using foreach...***");
+        for (String s : mll) {
+            //здесь s - текущий элемент!
+            System.out.print(s + " " + iter.hasNext() + ", ");
+        }
+        System.out.println();
+        System.out.println("\n***Test6.2. Using while...***");
+        while (iter.hasNext()){
+            System.out.print(iter.next() + " " + iter.hasNext() + ", ");
+        }
+        System.out.println();
+    }
+
+    //Test7. Тест итератора. Удаляем элемент, начинающийся на "V" из связанного списка
+    //с помощью цикла while
+    private void test7(){
+        Iterator<String> iter = mll.iterator();
+        System.out.println("\n***Test7. Trying to test iterator Using while...***");
+        String str = "";
+        while (iter.hasNext()){
+            str = (String)iter.next();
+            if(str.startsWith("V")){
+                iter.remove();//удаляет текущий элемент, если он начинается с V
+                System.out.println("After Test7. The element " + str + " have been removed");
+                break;
+            }
+        }
         for (String s : mll) {
             System.out.print(s + " ");
         }
+        System.out.println();
     }
 
+    //Test8. Тест итератора. Удаляем элементы, равный на "Maria" из связанного списка
+    //с помощью цикла foreach
+    /*private void test8(){
+        Iterator<String> iter = mll.iterator();
+        System.out.println("\n***Test8. Trying to test iterator Using foreach...***");
+        String str = "";
+        for ((String)MyLinkedList.Node s : mll) {
+            //str = iter.toString();//lesson4.hw.task1.MyLinkedList$Iter@4554617c
+            //System.out.println(str);//lesson4.hw.task1.MyLinkedList$Iter@4554617c
+            str = (String)s;
+            System.out.print(str + " ");
+            if(str.startsWith("M")){
+                iter.remove();//удаляет текущий элемент, если он начинается с M
+                System.out.println("After Test8. The element " + str + " have been removed");
+                break;
+            }
+        }
+        for (String s : mll) {
+            System.out.print(s + " ");
+        }
+        System.out.println();
+    }*/
 
 }

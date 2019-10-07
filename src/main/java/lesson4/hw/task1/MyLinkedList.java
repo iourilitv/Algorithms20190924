@@ -1,6 +1,7 @@
 package lesson4.hw.task1;
 
 import java.util.Iterator;
+
 //двусторонний связанный список
 public class MyLinkedList<Item> implements Iterable<Item> {
     private Node first;
@@ -20,7 +21,7 @@ public class MyLinkedList<Item> implements Iterable<Item> {
     /**
      * Внутренний класс итератора
      */
-    private class Iter implements Iterator<Item>{
+    public class Iter implements Iterator<Item>{//private
         Node current = new Node(null,first);
 
         //возвращает true, если есть следующий элемент
@@ -35,6 +36,14 @@ public class MyLinkedList<Item> implements Iterable<Item> {
             current = current.next;
             return (Item) current.getValue();
         }
+
+        //возвращает true, если есть следующий элемент
+        @Override
+        public void remove() {
+            current.getNext().setPrevious(current.previous);
+            current.getPrevious().setNext(current.next);
+        }
+
     }
 
     /**
