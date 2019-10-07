@@ -47,7 +47,7 @@ import java.util.Scanner;
  */
 public class Acmp0523 {
     public static void main(String[] args){
-        new Task0523().run();
+        //new Task0523().run();//TODO Parameterized Test.Deleted
     }
 }
 
@@ -56,23 +56,71 @@ class Task0523 {
     private PrintWriter out = new PrintWriter(System.out);
     private int tomesNumber;//Количество томов
     //объявляем целочисленный массив с количествами страниц в каждой главе
-    private int[] chaptersArray;
+    //private int[] chaptersArray;//TODO Parameterized Test.Deleted
+    private Integer[] chaptersArray;//TODO Parameterized Test.Added
     //инициируем флаг
     boolean flag;
 
-    void run() {
+    //TODO Parameterized Test.Added
+    public Task0523(Integer[] chaptersArray, int tomesNumber) {
+        this.chaptersArray = chaptersArray;
+        this.tomesNumber = tomesNumber;
+    }
+
+    //TODO Parameterized Test.Deleted
+    /*public void run() {
+                //Принимаем ширину диплома
+                //Количество глав
+                int chaptersNumber = in.nextInt();
+                //инициируем целочисленный массив с количествами страниц в каждой главе
+                chaptersArray = new int[chaptersNumber];
+                //инициируем максимальное количество страниц в одной главе
+                int maxPagesNumber = -1;
+                //инициируем общее количество страниц в романе
+                int totalPagesSum = 0;
+                //Принимаем количества страниц в главах и наполняем массив
+                for (int i = 0; i < chaptersArray.length; i++) {
+                    chaptersArray[i] = in.nextInt();
+                    //ищем максимальное число страниц в главе
+                    if(chaptersArray[i] > maxPagesNumber){
+                        //если элемент в массиве больше, то сохраняем его в переменной
+                        maxPagesNumber = chaptersArray[i];
+                    }
+                    //приплюсовываем значение текущего элемента к переменной суммы
+                    totalPagesSum += chaptersArray[i];
+                }
+
+                //TODO временно
+                //out.println("\n" + maxPagesNumber + ". " + totalPagesSum);
+                //out.flush();
+
+                //Принимаем количество томов
+                tomesNumber = in.nextInt();
+
+                //TODO временно
+                //out.println("The calculating has started... please wait.");
+                //out.flush();
+
+                //Находим минимально возможный объем(в страницах) самого «толстого» тома
+                int tomeSize = findMinAcceptableOfMaxTomeSize(maxPagesNumber, totalPagesSum);
+
+                out.println(tomeSize);
+                out.flush();
+            }*/
+    //TODO Parameterized Test.Added
+    public Integer run() {
         //Принимаем ширину диплома
         //Количество глав
-        int chaptersNumber = in.nextInt();
+        //int chaptersNumber = in.nextInt();//TODO Parameterized Test.Deleted
         //инициируем целочисленный массив с количествами страниц в каждой главе
-        chaptersArray = new int[chaptersNumber];
+        //chaptersArray = new int[chaptersNumber];//TODO Parameterized Test.Deleted
         //инициируем максимальное количество страниц в одной главе
         int maxPagesNumber = -1;
         //инициируем общее количество страниц в романе
         int totalPagesSum = 0;
         //Принимаем количества страниц в главах и наполняем массив
         for (int i = 0; i < chaptersArray.length; i++) {
-            chaptersArray[i] = in.nextInt();
+            //chaptersArray[i] = in.nextInt();//TODO Parameterized Test.Deleted
             //ищем максимальное число страниц в главе
             if(chaptersArray[i] > maxPagesNumber){
                 //если элемент в массиве больше, то сохраняем его в переменной
@@ -87,7 +135,7 @@ class Task0523 {
         //out.flush();
 
         //Принимаем количество томов
-        tomesNumber = in.nextInt();
+        //tomesNumber = in.nextInt();//TODO Parameterized Test.Deleted
 
         //TODO временно
         //out.println("The calculating has started... please wait.");
@@ -98,6 +146,7 @@ class Task0523 {
 
         out.println(tomeSize);
         out.flush();
+        return tomeSize;
     }
 
     /**
