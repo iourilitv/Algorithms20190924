@@ -1,10 +1,8 @@
 package lesson4.hw.task1;
 
 import java.util.Iterator;
-import java.util.Random;
 
 class TestL4_1 {
-    private Random random = new Random();
     MyLinkedList<String> mll = new MyLinkedList<>();
     //TODO Если его определить здесь, то вызываться методы встроенного Iterator
     //Инициализировать нужно локально

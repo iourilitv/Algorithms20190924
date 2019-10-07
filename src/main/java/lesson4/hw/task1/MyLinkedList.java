@@ -1,9 +1,10 @@
 package lesson4.hw.task1;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
 //двусторонний связанный список
-public class MyLinkedList<Item> implements Iterable<Item> {
+public class MyLinkedList<Item> implements Iterable<Item>{
     private Node first;
     private Node last;
     private int size = 0;
@@ -16,6 +17,77 @@ public class MyLinkedList<Item> implements Iterable<Item> {
     @Override
     public Iterator<Item> iterator() {
         return new Iter();
+    }
+
+    public ListIterator<Item> listIterator(){
+        return new ListIter();
+    }
+
+    /**
+     * Внутренний класс листитератора(двустороннего)
+     */
+    public class ListIter implements ListIterator<Item>{
+        Node current = new Node(null,first);
+
+        //возвращает true, если есть следующий элемент
+        @Override
+        public boolean hasNext() {
+            return current.getNext() != null;
+        }
+
+        //сдвигает текущий элемент на следующую позицию вправо
+        @Override
+        public Item next() {
+            current = current.next;
+            return (Item) current.getValue();
+        }
+
+        //возвращает true, если есть предыдующий элемент
+        @Override
+        public boolean hasPrevious() {
+            return current.getPrevious() != null;
+        }
+
+        //сдвигает текущий элемент на следующую позицию влево
+        @Override
+        public Item previous() {
+            current = current.previous;
+            return (Item)current.getValue();
+        }
+
+        @Override
+        public int nextIndex() {
+            return 0;
+        }
+
+        @Override
+        public int previousIndex() {
+            return 0;
+        }
+
+        //удаляет текущий элемент
+        @Override
+        public void remove() {
+            current.getNext().setPrevious(current.previous);
+            current.getPrevious().setNext(current.next);
+            size--;
+        }
+
+        //заменяет объект текущего элемента на новый
+        @Override
+        public void set(Item item) {
+            current.setValue(item);
+        }
+
+        //добавляем новый объект после? реально до текущего элемента
+        @Override
+        public void add(Item item) {
+            Node newNode = new Node(item, current, current.next);
+            current.setNext(newNode);
+            current.next.setPrevious(newNode);
+            size++;
+        }
+
     }
 
     /**
@@ -37,7 +109,7 @@ public class MyLinkedList<Item> implements Iterable<Item> {
             return (Item) current.getValue();
         }
 
-        //возвращает true, если есть следующий элемент
+        //удаляет текущий элемент
         @Override
         public void remove() {
             current.getNext().setPrevious(current.previous);
@@ -60,6 +132,12 @@ public class MyLinkedList<Item> implements Iterable<Item> {
 
         public Node(Item value, Node next) {
             this.value = value;
+            this.next = next;
+        }
+
+        public Node(Item value, Node previous, Node next) {
+            this.value = value;
+            this.previous = previous;
             this.next = next;
         }
 
