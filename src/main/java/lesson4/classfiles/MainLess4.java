@@ -34,7 +34,7 @@ public class MainLess4 {
             System.out.print(s + " : ");
         }
 
-        System.out.println();
+        System.out.println("\nTesting iterator...");
         Iterator<String> iterator = mll.iterator();
         while(iterator.hasNext()){
             System.out.print(iterator.next()+" ");
