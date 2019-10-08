@@ -13,30 +13,30 @@ import java.util.Collection;
 public class Task0523Test {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList( new Object[][] {
-                /*01*/{new Integer[]{1}, 1, 1},
-                /*02*/{new Integer[]{1, 1}, 1, 2},
-                /*03*/{new Integer[]{1, 1}, 2, 1},
-                /*04*/{new Integer[]{1, 2}, 2, 2},
-                /*05*/{new Integer[]{2, 1}, 2, 2},
-                /*06*/{new Integer[]{2, 2}, 2, 2},
-                /*07*/{new Integer[]{1, 1, 1}, 1, 3},
-                /*08*/{new Integer[]{1, 1, 1}, 2, 2},
-                /*09*/{new Integer[]{1, 1, 1}, 3, 1},
-                /*10*/{new Integer[]{1, 1, 2}, 2, 2},
-                /*11*/{new Integer[]{1, 2, 1}, 2, 3},
-                /*12*/{new Integer[]{2, 1, 1}, 2, 2},
-                /*13*/{new Integer[]{2, 1, 2}, 2, 3},
-                /*14*/{new Integer[]{2, 2, 1}, 2, 3},
-                /*15*/{new Integer[]{2, 2, 2}, 2, 4},/*9*/
-                /*16*/{new Integer[]{1, 1, 2, 5}, 1, 4},/*5*/
+        return Arrays.asList(new Object[][] {
+//                /*01*/{new Integer[]{1}, 1, 1},
+//                /*02*/{new Integer[]{1, 1}, 1, 2},
+//                /*03*/{new Integer[]{1, 1}, 2, 1},
+//                /*04*/{new Integer[]{1, 2}, 2, 2},
+//                /*05*/{new Integer[]{2, 1}, 2, 2},
+//                /*06*/{new Integer[]{2, 2}, 2, 2},
+//                /*07*/{new Integer[]{1, 1, 1}, 1, 3},
+//                /*08*/{new Integer[]{1, 1, 1}, 2, 2},
+//                /*09*/{new Integer[]{1, 1, 1}, 3, 1},
+//                /*10*/{new Integer[]{1, 1, 2}, 2, 2},
+//                /*11*/{new Integer[]{1, 2, 1}, 2, 3},
+//                /*12*/{new Integer[]{2, 1, 1}, 2, 2},
+//                /*13*/{new Integer[]{2, 1, 2}, 2, 3},
+//                /*14*/{new Integer[]{2, 2, 1}, 2, 3},
+//                /*15*/{new Integer[]{2, 2, 2}, 2, 4},
+                /*16*/{new Integer[]{1, 1, 2, 5}, 1, 4},/*9*/
                 /*17*/{new Integer[]{1, 1, 2, 5}, 2, 4},/*5*/
                 /*18*/{new Integer[]{1, 1, 2, 5}, 3, 4},/*5*/
-                /*19*/{new Integer[]{1, 1, 2, 5}, 4, 4},
-                /*20*/{new Integer[]{1, 2, 1, 1}, 3, 2},
-                /*21*/{new Integer[]{2, 1, 1, 2}, 2, 3},
-                /*22*/{new Integer[]{1, 2, 3, 4}, 4, 4},
-                /*23*/{new Integer[]{9, 5, 2, 4, 10}, 3, 11},
+//                /*19*/{new Integer[]{1, 1, 2, 5}, 4, 4},
+//                /*20*/{new Integer[]{1, 2, 1, 1}, 3, 2},
+//                /*21*/{new Integer[]{2, 1, 1, 2}, 2, 3},
+//                /*22*/{new Integer[]{1, 2, 3, 4}, 4, 4},
+//                /*23*/{new Integer[]{9, 5, 2, 4, 10}, 3, 11},
 
 
         });
@@ -53,7 +53,7 @@ public class Task0523Test {
 
     @Before
     public void init() {
-        task0523 = new Task0523(a, b).run();
+        task0523 = new Task0523(a, b).runTest();
     }
 
     @Test
