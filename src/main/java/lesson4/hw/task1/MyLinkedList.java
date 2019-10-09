@@ -112,8 +112,12 @@ public class MyLinkedList<Item> implements Iterable<Item>{
         //удаляет текущий элемент
         @Override
         public void remove() {
-            current.getNext().setPrevious(current.previous);
-            current.getPrevious().setNext(current.next);
+            if(current.getNext() != null){
+                current.getNext().setPrevious(current.previous);
+            }
+            if(current.getPrevious() != null){
+                current.getPrevious().setNext(current.next);
+            }
         }
 
     }
