@@ -1,4 +1,4 @@
-package lesson5;
+package lesson5.classfiles;
 
 public class Main {
     public static void main(String[] args) {
@@ -11,8 +11,8 @@ public class Main {
 //        System.out.println(triangleNum(5));
 //        System.out.println(recTriangleNum(5));
 
-        System.out.println(multiply(4, 7));
-        System.out.println(recMultiply(4, 7));
+        System.out.println(multiply(4, 8));
+        System.out.println(recMultiply(4, 8));
 
     }
 
