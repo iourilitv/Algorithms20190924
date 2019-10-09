@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 /**
  * Урок 5. Рекурсия.
- * Листинг программы по построению анаграмм.
+ * Листинг программы по построению анаграмм только для слов из 3 букв.
  */
 public class AnagrammApp {
     static int size;
