@@ -15,17 +15,18 @@ import java.math.RoundingMode;
  */
 public class Less5_hw_1 {
     public static void main(String[] args) {
-        System.out.println("0 ^ x = " + pow(0, 10));
-        System.out.println("1 ^ x = " + pow(1, 10));
-        System.out.println("x ^ 0 = " + pow(5, 0));
-        System.out.println("-x ^ 0 = " + pow(-5, 0));
-        System.out.println("2 ^ 10 = " + pow(2, 10));
-        System.out.println("-3 ^ 3 = " + pow(3, 3));
-        System.out.println("-3 ^ 4 = " + pow(-3, 4));
-        System.out.println("100000 ^ -1 = " + pow(100000, -1));
-        System.out.println("10 ^ -3 = " + pow(10, -3));
-        System.out.println("-10 ^ -5 = " + pow(-10, -5));
-        System.out.println("-10 ^ -6 = " + pow(-10, -6));
+//        System.out.println("0 ^ x = " + pow(0, 10) + " : " + Math.pow(0, 10));
+//        System.out.println("1 ^ x = " + pow(1, 10) + " : " + Math.pow(1, 10));
+//        System.out.println("x ^ 0 = " + pow(5, 0) + " : " + Math.pow(5, 0));
+//        System.out.println("-x ^ 0 = " + pow(-5, 0) + " : " + Math.pow(-5, 0));
+//        System.out.println("2 ^ 10 = " + pow(2, 10) + " : " + Math.pow(2, 10));
+//        System.out.println("-3 ^ 3 = " + pow(-3, 3) + " : " + Math.pow(-3, 3));
+//        System.out.println("-3 ^ 4 = " + pow(-3, 4) + " : " + Math.pow(-3, 4));
+        System.out.println("100000 ^ -1 = " + pow(100000, -1) + " : " + Math.pow(100000, -1));
+        System.out.println("-100000 ^ -1 = " + pow(-100000, -1) + " : " + Math.pow(-100000, -1));
+//        System.out.println("10 ^ -3 = " + pow(10, -3) + " : " + Math.pow(10, -3));
+//        System.out.println("-10 ^ -5 = " + pow(-10, -5) + " : " + Math.pow(-10,-5));
+//        System.out.println("-10 ^ -6 = " + pow(-10, -6) + " : " + Math.pow(-10,-6));
     }
 
     //Метод возведения положительного или отрицательного целочисленного числа
@@ -35,13 +36,7 @@ public class Less5_hw_1 {
         if(number == 0){// && number == -0 не нужно
             return 0;
         }
-        //по умолчанию считаем, что число положительное
-        int neg = 1;
-        //если число отрицательное и стерень нечетная меняем знак
-        if(number < 0 && Math.abs(degree) % 2 == 1){
-            neg = -1;
-        }
-        return degree < 0 ? neg * powNegative(number, degree) : neg * powPositive(number, degree);
+        return degree < 0 ? powNegative(number, degree) : powPositive(number, degree);
     }
 
     //Метод возведения положительного числа в положительную целочисленную степень
@@ -67,14 +62,15 @@ public class Less5_hw_1 {
     }
 }
 //Result.
-// 0 ^ x = 0.0
-//1 ^ x = 1.0
-//x ^ 0 = 1.0
-//-x ^ 0 = 1.0
-//2 ^ 10 = 1024.0
-//-3 ^ 3 = 27.0
-//-3 ^ 4 = 81.0
-//100000 ^ -1 = 1.0E-5
-//10 ^ -3 = 0.001
-//-10 ^ -5 = 1.0E-5
-//-10 ^ -6 = 1.0000000000000002E-6
+//0 ^ x = 0.0 : 0.0
+//1 ^ x = 1.0 : 1.0
+//x ^ 0 = 1.0 : 1.0
+//-x ^ 0 = 1.0 : 1.0
+//2 ^ 10 = 1024.0 : 1024.0
+//-3 ^ 3 = -27.0 : -27.0
+//-3 ^ 4 = 81.0 : 81.0
+//100000 ^ -1 = 1.0E-5 : 1.0E-5
+//-100000 ^ -1 = -1.0E-5 : -1.0E-5
+//10 ^ -3 = 0.001 : 0.001
+//-10 ^ -5 = -1.0E-5 : -1.0E-5
+//-10 ^ -6 = 1.0000000000000002E-6 : 1.0E-6
