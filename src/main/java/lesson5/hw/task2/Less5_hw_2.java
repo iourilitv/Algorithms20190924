@@ -1,5 +1,7 @@
 package lesson5.hw.task2;
 
+import java.util.Arrays;
+
 /**
  * GBJava3
  * Algorithms and data structures in Java. 24.09.2019 Webinar. Teacher: Fanzil' Kusyapkulov
@@ -41,7 +43,8 @@ public class Less5_hw_2 {
                 new Box(12, 4),
         };
 
-        new Packer(boxes, new Knapsack(15));
+        Packer packer = new Packer(boxes, new Knapsack(15));
+        System.out.println(Arrays.toString(packer.fillKnapsack()));
     }
 
 
