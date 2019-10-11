@@ -1,4 +1,4 @@
-package lesson5.hw.task2;
+package lesson5.hw.task2.draft;
 
 import java.util.Arrays;
 
@@ -41,8 +41,9 @@ class Packer {
 
 
     int[] fillKnapsack() {
-        int[] knapsack = new int[boxes.length];
+        //int[] knapsack = new int[boxes.length];
         
-        return knapsack;
+        //return knapsack;
+        return null;
     }
 }

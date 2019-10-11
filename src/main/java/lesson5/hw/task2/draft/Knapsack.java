@@ -1,4 +1,4 @@
-package lesson5.hw.task2;
+package lesson5.hw.task2.draft;
 
 class Knapsack {
     private int[] weights;//массив весов всех вещей

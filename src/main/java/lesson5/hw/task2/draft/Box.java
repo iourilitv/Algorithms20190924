@@ -1,4 +1,4 @@
-package lesson5.hw.task2;
+package lesson5.hw.task2.draft;
 
 class Box {
     private int weight; //вес коробки
@@ -9,7 +9,7 @@ class Box {
         this.value = value;
     }
 
-    public int getWeight() {
+    int getWeight() {
         return weight;
     }
 
