@@ -26,12 +26,25 @@ public class Less5_hw_1 {
         System.out.println("-100000 ^ -1 = " + pow(-100000, -1) + " : " + Math.pow(-100000, -1));
         System.out.println("10 ^ -3 = " + pow(10, -3) + " : " + Math.pow(10, -3));
         System.out.println("-10 ^ -5 = " + pow(-10, -5) + " : " + Math.pow(-10,-5));
-        System.out.println("-10 ^ -6 = " + pow(-10, -6) + " : " + Math.pow(-10,-6));
+
+        //TODO Updated.Adding rounding.Deleted
+        //System.out.println("-10 ^ -6 = " + pow(-10, -6) + " : " + Math.pow(-10,-6));
+        //TODO Updated.Adding rounding.Added
+        System.out.printf("-10 ^ -6 = %f", pow(-10, -6));
+        System.out.println(" : " + Math.pow(-10,-6));
+        //-10 ^ -6 = 0,000001 : 1.0E-6
     }
 
     //Метод возведения положительного или отрицательного целочисленного числа
     // в положительную или отрицательную целочисленную степень
     private static double pow(int number, int degree){
+
+        //TODO Updated.Correction adding.Added
+        //если оба аргумента ноли - это математическая неопределенность
+        if(number == 0 && degree == 0){
+            throw new ArithmeticException("\"0 ^ \" math uncertainly!");
+        }
+
         //если число 0, возвращаем 0
         if(number == 0){// && number == -0 не нужно
             return 0;
@@ -47,18 +60,28 @@ public class Less5_hw_1 {
         if(degree == 1){
             return number;
         }
-        return powPositive(number, degree - 1) * number;
+        //TODO Updated.Optimizing.Deleted
+        //return powPositive(number, degree - 1) * number;
+        //TODO Updated.Optimizing.Added
+        //можно ускорить расчет представив степень ее как сумму:
+        // degree/2 + degree/2 - для четных и degree/2 + degree/2 + 1 - для нечетных степеней
+        long pow2 = powPositive(number, degree / 2);
+        return degree %2 == 0 ? pow2 * pow2 : pow2 * pow2 * number;
     }
 
     //Метод возведения положительного числа в отрицальную целочисленную степень 1/a^n
     private static double powNegative(int number, int degree){
         if(degree == -1){
             return (double) 1 / number;
-            //пытался округить, но сам не понял, что хотел
-            //BigDecimal bigDecimal = new BigDecimal(String.valueOf((double) 1 / number)).setScale(number / 10, BigDecimal.ROUND_HALF_UP);
-            //return bigDecimal.doubleValue();
         }
-        return powNegative(number, degree + 1) * (double) 1 / number;
+
+        //TODO Updated.Optimizing.Deleted
+        //return powNegative(number, degree + 1) * (double) 1 / number;
+        //TODO Updated.Optimizing.Added
+        //можно ускорить расчет представив степень ее как сумму:
+        // degree/2 + degree/2 - для четных и degree/2 + degree/2 + 1 - для нечетных степеней
+        double pow2 = powNegative(number, degree / 2);
+        return degree %2 == 0 ? pow2 * pow2 : pow2 * pow2 * 1 / number;
     }
 }
 //Result.
