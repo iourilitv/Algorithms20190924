@@ -3,6 +3,29 @@ package lesson6.hw;
 public class MyTreeMap<Key extends Comparable<Key>, Value> {
     private Node root;//корневой узел - вершина дерева
 
+    //TODO less6hw.Added
+    private int height;//высота дерева
+
+    //TODO less6hw.Added
+    MyTreeMap(int height) {
+        this.height = height;
+    }
+
+    //TODO less6hw.Added
+    int height() {
+        return height(root);
+    }
+
+    //TODO less6hw.Added
+    private int height(Node node) {
+        //базовый случай рекурсии, дошли до нулевого узла, возвращаем 0
+        if (node == null) {
+            return 0;
+        }
+        //возвращаем высоту текущего поддерева
+        return 0;//node.height;//FIXME
+    }
+
     private class Node {
         Key key;//ключ узла
         Value value;//значение узла
@@ -10,10 +33,14 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
         Node right;//правый потомок узла
         int size;//размер дерева
 
+        //TODO less6hw.Added
+        int height;//высота дерева
+
         Node(Key key, Value value) {
             this.key = key;
             this.value = value;
             size = 1;//как только создали корень, размер дерева стал 1
+            height = 0;//при создании любого узла - его высота равна 0
         }
     }
 
@@ -36,7 +63,7 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
         if (node == null) {
             return 0;
         }
-        //возвращаем размер текущего под дерева
+        //возвращаем размер текущего поддерева
         return node.size;
     }
 
