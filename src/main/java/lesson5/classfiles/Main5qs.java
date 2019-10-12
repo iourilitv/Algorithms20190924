@@ -4,6 +4,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
+/**
+ * Algorithms and data structures in Java. 24.09.2019 Webinar. Teacher: Fanzil' Kusyapkulov
+ * Урок 5. Рекурсия
+ * Зачем функция вызывает саму себя?
+ *
+ */
 public class Main5qs {
     public static void main(String[] args) {
         Random random = new Random();
