@@ -3,29 +3,9 @@ package lesson6.hw;
 public class MyTreeMap<Key extends Comparable<Key>, Value> {
     private Node root;//корневой узел - вершина дерева
 
-    //TODO less6hw.Added
-    private int height;//высота дерева
-
-    //TODO less6hw.Added
-    MyTreeMap(int height) {
-        this.height = height;
-    }
-
-    //TODO less6hw.Added
-    int height() {
-        return height(root);
-    }
-
-    //TODO less6hw.Added
-    private int height(Node node) {
-        //базовый случай рекурсии, дошли до нулевого узла, возвращаем 0
-        if (node == null) {
-            return 0;
-        }
-        //возвращаем высоту текущего поддерева
-        return 0;//node.height;//FIXME
-    }
-
+    /**
+     * Внутренний класс определяющий узлы дерева
+     */
     private class Node {
         Key key;//ключ узла
         Value value;//значение узла
@@ -35,12 +15,14 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
 
         //TODO less6hw.Added
         int height;//высота дерева
+        boolean balance;//сбалансированность дерева
 
         Node(Key key, Value value) {
             this.key = key;
             this.value = value;
             size = 1;//как только создали корень, размер дерева стал 1
             height = 0;//при создании любого узла - его высота равна 0
+            balance = true;//при создании любого узла он считается сбалансированным
         }
     }
 
@@ -67,6 +49,55 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
         return node.size;
     }
 
+    //TODO less6hw.Added
+    /**
+     * Публичный метод начала получения высоты дерева
+     * @return размер дерева
+     */
+    int height() {
+        return height(root);
+    }
+
+    //TODO less6hw.Added
+    /**
+     * Рекурсивный метод получения высоты дерева
+     * @param node - текущий узел(вершина)
+     * @return высота текущего поддерева(узла)
+     */
+    private int height(Node node) {
+        //базовый случай рекурсии, дошли до нулевого узла или узла нулевой высотой, возвращаем 0
+        if (node == null) {//начальный случай, когда даже root еще не создан
+            return 0;
+        }
+        //возвращаем высоту текущего поддерева
+        return node.height;
+    }
+
+    //TODO less6hw.Added
+    /**
+     * Публичный метод начала получения сбалансированности дерева
+     * @return true - дерево сбалансировано(разница высот его детей не превышает 1)
+     */
+    boolean isBalanced() {
+        return isBalanced(root);
+    }
+
+    //TODO less6hw.Added
+    /**
+     * Рекурсивный метод получения сбалансированности дерева
+     * @param node - текущий узел(вершина)
+     * @return true - дерево сбалансировано(разница высот его детей не превышает 1)
+     */
+    private boolean isBalanced(Node node) {
+        //базовый случай рекурсии, дошли до нулевого узла или узла нулевой высотой, возвращаем 0
+        if (node == null) {//начальный случай, когда даже root еще не создан
+            return true;
+        }
+        //если любой узел потомок несбалансирован, то все дерево - несбалансировано
+        //возвращаем сбалансированность текущего поддерева
+        return node.balance;
+    }
+
     /**
      * Метод проверки не пустое ли дерево
      * @return true - дерево пустое(корня нет)
@@ -78,13 +109,11 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
     /**
      * Метод проверки на пустой ключ
      * @param key - проверяемый ключ
-     * @return true - ключ, не пустой, иначе исключение
      */
-    private boolean isKeyNotNull(Key key) {
+    private void isKeyNotNull(Key key) {
         if (key == null) {
             throw new IllegalArgumentException("key не должен быть null");
         }
-        return true;
     }
 
     /**
@@ -134,6 +163,9 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
      * @param value - значение узла на добавление
      */
     void put(Key key, Value value) {
+        //TODO временно
+        System.out.println("putting the key: " + key);
+
         //ключ и значение не должны быть пустыми
         isKeyNotNull(key);
         if (value == null) {
@@ -172,10 +204,72 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
             //ищем в ветке с правым потомком
             node.right = put(node.right, key, value);
         }
+
+        //TODO less6hw.Deleted
         //пересчитываем размер дерева
-        node.size = size(node.left) + size(node.right) + 1;
+        //node.size = size(node.left) + size(node.right) + 1;
+        //TODO less6hw.Added
+        //пересчитываем размер, высоту и сбалансированность дерева
+        recalculate(node);
+
         //возврашаем добавленный узел
         return node;
+    }
+
+    //TODO less6hw.Added
+    /**
+     * Метод пересчета размера, высоты и сбалансированности дерева
+     * @param node - текущий узел
+     */
+    private void recalculate(Node node) {
+        calculateSize(node);
+        calculateHeightAndBalance(node);
+    }
+
+    //TODO less6hw.Added
+    /**
+     * Рекурсивный метод расчета размера дерева
+     * @param node - текущий узел
+     */
+    private void calculateSize(Node node) {
+        //пересчитываем размер дерева
+        node.size = size(node.left) + size(node.right) + 1;
+    }
+
+    //TODO less6hw.Added
+    /**
+     * Рекурсивный метод расчета высоты и баланса дерева
+     * @param node - текущий узел
+     */
+    private void calculateHeightAndBalance(Node node) {
+        //пересчитываем высоты детей дерева
+        int leftH = height(node.left);
+        int rightH = height(node.right);
+        //пересчитываем высоту самого дерева
+        calculateHeight(node, leftH, rightH);
+        //если высота одно из деревьев отличается от другого больше, чем на 1, дерево несбалансированно.
+        calculateBalance(node, leftH, rightH);
+    }
+
+    //TODO less6hw.Added
+    /**
+     * Метод расчета высоты дерева
+     * @param node - текущий узел
+     */
+    private void calculateHeight(Node node, int leftH, int rightH) {
+        //высота равна высоте самого большого плеча + 1
+        node.height = Math.max(leftH, rightH) + 1;
+    }
+
+    //TODO less6hw.Added
+    /**
+     * Метод расчета сбалансированности дерева
+     * @param node - текущий узел
+     */
+    private void calculateBalance(Node node, int leftH, int rightH) {
+        //если высота одно из деревьев отличается от другого больше, чем на 1, то
+        // дерево несбалансированно
+        node.balance = !(Math.abs(leftH - rightH) > 1);
     }
 
     /**
@@ -236,8 +330,14 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
         //рекурсивно идем все левее и левее пока не дойдем до конца
         //и удаляем узел с самым маленьким ключем(в идеале - самый левый)
         node.left = deleteMin(node.left);
+
+        //TODO less6hw.Deleted
         //пересчитываем размер дерева после удаления узла
-        node.size = size(node.left) + size(node.right) + 1;
+        //node.size = size(node.left) + size(node.right) + 1;
+        //TODO less6hw.Added
+        //пересчитываем размер, высоту и сбалансированность дерева
+        recalculate(node);
+
         //возвращаем удаленный узел
         return node;
     }
@@ -299,8 +399,14 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
             node.left = temp.left;
 
         }
+
+        //TODO less6hw.Deleted
         //пересчитываем размер дерева
-        node.size = size(node.left) + size(node.right) + 1;
+        //node.size = size(node.left) + size(node.right) + 1;
+        //TODO less6hw.Added
+        //пересчитываем размер, высоту и сбалансированность дерева
+        recalculate(node);
+
         //возвращаем удаленный узел, если нашли
         return node;
     }
@@ -318,8 +424,11 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
         }
         //сначала выводим все левые, начиная с самого левого, затем правые,
         // возвращаясь от самого левого на верх
-        return toString(node.left) + " " +
-                node.key.toString() + " = " + node.value.toString() +
-                ", " + toString(node.right);
+        return toString(node.left) +
+                node.key.toString() + "(" + node.value.toString() + ")" + ", " +
+                toString(node.right);
+
+
     }
+
 }

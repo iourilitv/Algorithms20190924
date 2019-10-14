@@ -14,22 +14,17 @@ package lesson6.hw;
  */
 public class MainLess6hw {
     public static void main(String[] args) {
+        //Создаем одно дерево с высотой 1
+//        TreesMaker treesMaker = new TreesMaker();
 
-//        MyTreeMap<Integer, String> mtm = new MyTreeMap<>();
-//        mtm.put(5,"five");
-//        mtm.put(1,"one");
-//        mtm.put(3,"tree");
-//        mtm.put(4,"four");
-//        mtm.put(2,"two");
-//
-//        System.out.println(mtm.get(2));
-//        mtm.put(2,"two2222");
-//
-//        System.out.println(mtm.get(2));
-//        System.out.println(mtm);
-//
-//        mtm.delete(3);
-//        System.out.println(mtm);
+        //Создаем одинаковые деревья с высотой 6
+        int numberOfTrees = 20;//количество деревьев
+        int maxTreeHeight = 6;//заданная высота деревьев
+        TreesMaker treesMaker = new TreesMaker(numberOfTrees, maxTreeHeight);
+
+        //создаем деревья с разной высотой
+//        int[] treesHeights = {5, 1, 3, 6, 10};//количество деревьев
+//        TreesMaker treesMaker = new TreesMaker(treesHeights);
 
     }
 }
