@@ -1,4 +1,4 @@
-package lesson7;
+package lesson7.hw;
 
 import java.util.LinkedList;
 

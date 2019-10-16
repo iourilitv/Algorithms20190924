@@ -1,4 +1,4 @@
-package lesson7;
+package lesson7.classfiles;
 
 /**
  * Algorithms and data structures in Java. 24.09.2019 Webinar. Teacher: Fanzil' Kusyapkulov

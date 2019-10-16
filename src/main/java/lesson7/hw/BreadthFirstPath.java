@@ -1,4 +1,6 @@
-package lesson7;
+package lesson7.hw;
+
+import lesson7.classfiles.Graph;
 
 import java.util.LinkedList;
 
