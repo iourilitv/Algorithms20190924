@@ -7,18 +7,21 @@ public class Graph {
     private int edgeCount = 0;//количество ребер(связей между вершинами)
     private LinkedList<Integer>[] adjList;//ссылочный массив связей вершин(ссылочных массивов)
 
-    public Graph(int vertexCount) {
+    Graph(int vertexCount) {
         if (vertexCount <= 0) {
             throw new IllegalArgumentException("Неверное количество вершин " + vertexCount);
         }
         this.vertexCount = vertexCount;
         adjList = new LinkedList[vertexCount];//инициируем ссылочный массив связей вершин
-        for (int i = 0; i < adjList.length; i++) {//наполняем его пустыми ссылочными массивами для каждой вершины
+        //наполняем его пустыми ссылочными массивами для каждой вершины
+        for (int i = 0; i < adjList.length; i++) {
             adjList[i] = new LinkedList<>();
         }
+        //TODO Attention! Не использовать .fill() - он всем элементам присваивает одну и туже ссылку!
+        //Arrays.fill(adjList, new LinkedList<>());
     }
 
-    public int getVertexCount() {
+    int getVertexCount() {
         return vertexCount;
     }
 
@@ -26,18 +29,30 @@ public class Graph {
         return edgeCount;
     }
 
-    //Метод возвращает клон ссылочного массива связей вершины, чтобы не испортили его извне.
+    //Метод возвращает клон ссылочного массива связей заданной вершины, чтобы не испортили его извне.
     //(LinkedList<Integer>) - приведение к нашему типу. т.к. clone() возвращает Object
-    public LinkedList<Integer> getAdjList(int vertex) {
+    LinkedList<Integer> getAdjList(int vertex) {
         return (LinkedList<Integer>) adjList[vertex].clone();
     }
 
     //Метод добавляем связь между вершинами
-    public void addEdge(int v1, int v2) {
+    void addEdge(int v1, int v2) {
         if (v1 < 0 || v2 < 0 || v1 >= vertexCount || v2 >= vertexCount) {
             throw new IllegalArgumentException();
         }
         adjList[v1].add(v2);
-        adjList[v2].add(v1);
+
+        //TODO lesson7hw.Deleted
+        //adjList[v2].add(v1);
+        //TODO lesson7hw.Added
+        //исключаем задвоение, для петлей
+        if (v1 != v2){
+            adjList[v2].add(v1);
+        }
+    }
+
+    //Метод возвращает клон ссылочного массива связей(ссылочных массивов) в графе для каждой вершины
+    LinkedList<Integer>[] getAdjList() {
+        return adjList.clone();
     }
 }
