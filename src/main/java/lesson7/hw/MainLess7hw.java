@@ -6,7 +6,7 @@ import java.util.Scanner;
 /**
  * Algorithms and data structures in Java. 24.09.2019 Webinar. Teacher: Fanzil' Kusyapkulov
  * Урок 7. Графы
- *  * Рассмотрим работу с одной из самых гибких и универсальных структур.
+ * Рассмотрим работу с одной из самых гибких и универсальных структур.
  * Homework.
  * @author Yiriy Litvinenko
  * DONE 1. Реализовать программу, в которой задается граф из 10 вершин.
