@@ -2,6 +2,7 @@ package lesson7.hw.acmp;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -87,83 +88,34 @@ class Task0932 {
             int v2 = in.nextInt() - 1;
             graph.addEdge(v1, v2);//добавляем связь
         }
-
-        BreadthFirstPath bfp = new BreadthFirstPath(graph);
-
-        //TODO Временно
-        bfp.showAdjacencyList(graph, out);
-
         //запускаем поиск троек для столиц
-        TriplesFinder triplesFinder = new TriplesFinder(distance, bfp.getGraph().getAdjList());
+        TriplesFinder triplesFinder = new TriplesFinder(distance, graph);
         //запускаем поиск троек для столиц
         int triplesCount = triplesFinder.find();
 
         out.println(triplesCount);
         out.flush();
     }
-
-    /*public Integer runTest() {
-        //Принимаем ширину диплома
-        //Количество глав
-        //int chaptersNumber = in.nextInt();//TODO Parameterized Test.Deleted
-        //инициируем целочисленный массив с количествами страниц в каждой главе
-        //chaptersArray = new int[chaptersNumber];//TODO Parameterized Test.Deleted
-        //инициируем максимальное количество страниц в одной главе
-        int maxPagesNumber = -1;
-        //инициируем общее количество страниц в романе
-        int totalPagesSum = 0;
-        //Принимаем количества страниц в главах и наполняем массив
-        for (int i = 0; i < chaptersArray.length; i++) {
-            //chaptersArray[i] = in.nextInt();//TODO Parameterized Test.Deleted
-            //ищем максимальное число страниц в главе
-            if(chaptersArray[i] > maxPagesNumber){
-                //если элемент в массиве больше, то сохраняем его в переменной
-                maxPagesNumber = chaptersArray[i];
-            }
-            //приплюсовываем значение текущего элемента к переменной суммы
-            totalPagesSum += chaptersArray[i];
-        }
-
-        //TODO временно
-        //out.println("\n" + maxPagesNumber + ". " + totalPagesSum);
-        //out.flush();
-
-        //Принимаем количество томов
-        //tomesNumber = in.nextInt();//TODO Parameterized Test.Deleted
-
-        //TODO временно
-        //out.println("The calculating has started... please wait.");
-        //out.flush();
-
-        //Находим минимально возможный объем(в страницах) самого «толстого» тома
-        int tomeSize = findMinAcceptableOfMaxTomeSize(maxPagesNumber, totalPagesSum);
-
-        out.println(tomeSize);
-        out.flush();
-        return tomeSize;
-    }*/
-
-
 }
 
 class TriplesFinder {
-    private boolean[] tacked;//отметка, что вершина уже проверена
-    private ArrayList<Integer>[] drafts;//массив массивов кандидатов троек на проверку
-    private ArrayList<Integer> triples;//массив троек прошедших проверку
+    private ArrayList<Integer>[] drafts;//массив коллекций кандидатов троек на проверку
+    private ArrayList<Integer[]> triples;//коллекция массивов троек прошедших проверку
     private int distance;//Количество заданное расстояние между столицами(вершинами)
     private LinkedList<Integer>[] adjLists;//Ссылочный массив всех связей(ссылочных массивов) в графе
     private int vertexCount;//количество вершин в графе
+    private Graph g;//граф
 
-    TriplesFinder(int distance, LinkedList<Integer>[] adjLists) {
+    TriplesFinder(int distance, Graph g) {
         this.distance = distance;
-        this.adjLists = adjLists;
+        this.g = g;
+        adjLists = g.getAdjList();
         vertexCount = adjLists.length;
-        tacked = new boolean[vertexCount];
-        drafts = new ArrayList[vertexCount];//инициируем коллекцию коллекций кандидатов
-        for (int i = 0; i < drafts.length; i++) {//наполняем ее пустыми коллкциями
+        drafts = new ArrayList[vertexCount];//инициируем массив коллекций кандидатов
+        triples = new ArrayList<>();
+        for (int i = 0; i < drafts.length; i++) {//наполняем ее пустыми коллекциями
             drafts[i] = new ArrayList<>();
         }
-        triples = new ArrayList<>();
     }
 
     /**
@@ -173,85 +125,153 @@ class TriplesFinder {
     int find() {
         //запускаем заполнение массива массивов draft
         for (int i = 0; i < vertexCount; i++) {
-            //помечаем, что вершина уже проверена
-            tacked[i] = true;
             //запускаем поиск кандидатов для этой вершины
             peekUpCandidates(i);
+            //анализируем массив кандидатов draft и наполняем коллекцию троек
+            checkTriples(i);
         }
-        //анализируем массив кандидатов draft и наполняем коллекцию троек
-        //FIXME
-
         //возвращаем коллекцию массивов троек
         return triples.size();
     }
 
-    /**
-     * Метод наполнения массива draft массивами кандидатами элементов троек
-     */
-    void peekUpCandidates(int from){
+    //Метод наполнения массива draft массивами кандидатами элементов троек
+    private void peekUpCandidates(int source) {
+        boolean[] marked = new boolean[g.getVertexCount()];//маркер посещен(visited)
+        LinkedList<Integer> queue = new LinkedList<>();//инициируем очередь
+        queue.addLast(source);//добавляем начальную вершину в конец очереди
+        marked[source] = true;//сразу помечаем "посещен" текущую вершину
+        //гоняем цикл пока не достигнем заданной дистанции
+        for (int i = 0; i < distance; i++) {
+            //инициируем временную очередь
+            LinkedList<Integer> curQueue = new LinkedList<>();
+            //крутим цикл пока очередь не пуста
+            while (!queue.isEmpty()) {
+                //сохраняем удаленную из начала очереди вершину
+                int vertex = queue.removeFirst();
+                //проверяем последовательно все элементы в ссылочном списке связей вершин-соседей w
+                for (int w : g.getAdjList(vertex)) {
+                    //если вершина-сосед еще не посещена
+                    if (!marked[w]) {
+                        //помечаем вершину-соседа, как посещенную
+                        marked[w] = true;
+                        //и теперь соседа добавляем в конец очереди, как текущую вершину
+                        curQueue.addLast(w);
+                    }
+                }
+            }
+            //присваиваем очереди ссылку на текущую очередь
+            queue = curQueue;
+        }
+        //сохраняем связанную вершину(соседа) в коллекцию кандидатов
+        drafts[source].addAll(queue);
+    }
+
+    //Метод проверки массива кандидатов и наполнения массива троек
+    private void checkTriples(int vertex) {
+        //листаем ссылочный массив кандидатов вершины
+        for (int i = 0; i < drafts[vertex].size() - 1; i++) {
+            //проверяем в подцикле для выбранной вершины
+            for (int j = i + 1; j < drafts[vertex].size(); j++) {
+                //если проверяемые вершины находятся на заданном расстоянии
+                if(checkDistance(drafts[vertex].get(i), drafts[vertex].get(j))){
+                    //формируем тройку
+                    Integer[] array = {vertex, drafts[vertex].get(i), drafts[vertex].get(j)};
+                    //сортируем массив(тройку)
+                    Arrays.sort(array);
+                    //если такой тройки еще нет в ссылочном массиве
+                    if(!isDuplicate(array)){
+                        //сохраняем тройку
+                        triples.add(array);
+                    }
+                }
+            }
+        }
+    }
+
+    //Метод проверки расстояния между проверяемыми вершинами
+    private boolean checkDistance(int from, int to){
         //инициируем очередь
         LinkedList<Integer> queue = new LinkedList<>();
         //добавляем начальную вершину в конец очереди
         queue.addLast(from);
-        //инициируем текущую дистанцию
-        int currentDistance = 1;
-        //инициируем предыдущую вершину(из которой пришли)
-        int prevVertex = from;
-        int currentVertex = from;
-
-//        //крутим цикл пока текущая дистанция не равна заданной
-//        while (currentDistance != distance) {
-//            //инициируем очередь
-//            LinkedList<Integer> queue = new LinkedList<>();
-//            //наполняем очередь вершинами связанными с текущей вершиной
-//            queue.addAll(adjLists[currentVertex]);
-//            //наполняем очередь связанными вершинами
-//            queue = fillQueue(queue, currentVertex);
-//            //инкрементируем текущую дистанцию
-//            currentDistance++;
-//        }
-
-        //крутим цикл пока текущая дистанция не равна заданной
-        while (currentDistance <= distance) {
-            //инициируем временную очередь
-            LinkedList<Integer> curQueue = new LinkedList<>();;
-            //крутим цикл пока очередь не пуста
-            while (!queue.isEmpty()) {
-                //сохраняем удаленную из начала очереди вершину
-                currentVertex = queue.removeFirst();
-                //наполняем текущую очередь связями текущей вершины, исключая откуда пришли
-                for (int w : adjLists[currentVertex]) {
-                    if (w != prevVertex) {
-                        curQueue.addLast(w);
+        //инициируем временный массив откуда пришли к этой вершине
+        int[] cameFrom = new int[vertexCount];
+        //инициируем временный массив маркеров посещена ли вершина
+        boolean[] visited = new boolean[vertexCount];
+        //сразу помечаем "посещен" стартовую вершину
+        visited[from] = true;
+        //крутим цикл пока очередь не пуста
+        while (!queue.isEmpty()) {
+            //сохраняем удаленную из начала очереди вершину
+            int vertex = queue.removeFirst();
+            //проверяем последовательно все элементы в ссылочном списке связей вершин-соседей w
+            for (int w : g.getAdjList(vertex)) {
+                if (!visited[w]) {
+                    //помечаем вершину-соседа, как посещенную
+                    visited[w] = true;
+                    //добавляем в ее ячейку массива вершину, откуда к ней пришли
+                    cameFrom[w] = vertex;
+                    //если вершина-сосед это искомая вершина
+                    if(w == to){
+                        //выходим из цикла и возвращаем результат проверки дистанции пути
+                        return checkPathTo(from, to, cameFrom, visited);
                     }
+                    //и теперь соседа добавляем в конец очереди, как текущую вершину
+                    queue.addLast(w);
                 }
-//                //проверяем последовательно все элементы в ссылочном списке связей вершин-соседей w
-//                for (int w : adjLists[currentVertex]) {
-//
-////                    if (currentDistance == distance && w != prevVertex) {
-////                        //сохраняем связанную вершину(соседа) в коллекцию кандидатов
-////                        drafts[from].add(w);
-////                    } else {
-//                        //и теперь соседа добавляем в конец очереди, как текущую вершину
-//                        queue.addLast(w);
-////                    }
             }
-            //присваиваем очереди ссылку на текущую очередь
-            queue = curQueue;
-            //сохраняем ее как предыдущую для следующих
-            prevVertex = currentVertex;
-            //инкрементируем текущую дистанцию
-            currentDistance++;
         }
+        return false;//если не найден путь, возвращаем false
     }
 
-    /*LinkedList<Integer> fillQueue(LinkedList<Integer> queue, int currentVertex){
+    /**
+     * Метод возвращает результат проверки дистанции пути от самой вершины до требуемой
+     * @param from - стартовая вершина
+     * @param to - конечная вершина
+     * @param cameFrom - массив откуда пришли к этой вершине в процессе поиска
+     * @param visited - массив отметок посещены ли вершины
+     * @return - true - вершины находятся на требуемом расстоянии друг от друга
+     */
+    private boolean checkPathTo(int from, int to, int[] cameFrom, boolean[] visited){
+        if (!visited[to]){//проверяем дошли ли
+            return false;
+        }
+        //создаем стек, куда будем складывать вершины
+        LinkedList<Integer> stack = new LinkedList<>();
+        int vertex = to;
+        //наполняем стэк пока не вернемся к начальной вершине, то есть путем,
+        // который прошли во время обхода
+        while(vertex != from){
+            stack.push(vertex);
+            vertex = cameFrom[vertex];
+        }
+        return stack.size() == distance;
+    }
 
-        //наполняем очередь ссылочным массивов связей вершины
-        queue.addAll(adjLists[currentVertex]);
-        return queue;
-    }*/
-
+    //Метод проверки на наличие дубликата тройки
+    private boolean isDuplicate(Integer[] array) {
+        if(triples.size() == 0){
+            return false;
+        }
+        boolean flag = true;
+        //во внешнем цикле ищем элементы
+        for (int i = 0; i < triples.size(); i++) {
+            flag = true;
+            //запускаем горизонтальный поиск
+            for (int j = 0; j < array.length; j++) {
+                //если элементы не равны, выходим из внутреннего цикла
+                if(!triples.get(i)[j].equals(array[j])){
+                    flag = false;
+                    break;
+                }
+            }
+            //если тройки равны выходим из внешнего цикла - нашли дубликат
+            if(flag){
+                break;
+            }
+        }
+        return flag;
+    }
 }
 
 class Graph {
@@ -295,162 +315,5 @@ class Graph {
     //Метод возвращает клон ссылочного массива связей(ссылочных массивов) в графе для каждой вершины
     LinkedList<Integer>[] getAdjList() {
         return adjList.clone();
-    }
-}
-
-//Класс обхода графа в ширину
-class BreadthFirstPath {
-    private boolean[] marked;//маркер посещен(visited)
-    private int[] edgeTo;//массив откуда пришли к этой вершине
-    private Graph graph;//граф
-
-    BreadthFirstPath(Graph g) {
-        //начальная вершина обхода графа
-        int source = 0;
-        this.graph = g;
-        edgeTo = new int[g.getVertexCount()];
-        marked = new boolean[g.getVertexCount()];
-        bfs(g, source);
-    }
-
-    /**
-     * Рекурсивный метод обхода графа в ширину
-     * @param g - граф
-     * @param source - текущая вершина
-     */
-    private void bfs(Graph g, int source) {
-        LinkedList<Integer> queue = new LinkedList<>();//инициируем очередь
-        queue.addLast(source);//добавляем начальную вершину в конец очереди
-        marked[source] = true;//сразу помечаем "посещен" текущую вершину
-
-        //крутим цикл пока очередь не пуста
-        while (!queue.isEmpty()) {
-            //сохраняем удаленную из начала очереди вершину
-            int vertex = queue.removeFirst();
-            //проверяем последовательно все элементы в ссылочном списке связей вершин-соседей w
-            for (int w : g.getAdjList(vertex)) {
-                //если вершина-сосед еще не посещена
-                if (!marked[w]) {
-                    //помечаем вершину-соседа, как посещенную
-                    marked[w] = true;
-                    //добавляем в ее ячейку массива вершину, откуда к ней пришли
-                    edgeTo[w] = vertex;
-                    //и теперь соседа добавляем в конец очереди, как текущую вершину
-                    queue.addLast(w);
-                }
-            }
-        }
-    }
-
-    /**
-     * Метод из массива самой вершины возвращает значение в ячейке проверяемой вершины,
-     * полученное в результате обхода графа
-     * @param v - проверяемая вершина
-     * @return true - да, путь к этой вершине есть, false - не дошли, значит пути нет.
-     */
-    /*private boolean hasPathTo(int v){
-        return marked[v];
-    }*/
-
-    /**
-     * Метод возвращает путь от самой вершины до требуемой
-     * @param v - проверяемая вершина
-     * @return стек
-     */
-    /*public LinkedList<Integer> pathTo(int v){
-        if (!hasPathTo(v)){//проверяем дошли ли
-            return null;
-        }
-        //создаем стек, куда будем складывать вершины
-        LinkedList<Integer> stack = new LinkedList<>();
-        int vertex = v;
-        //наполняем стэк пока не вернемся к начальной вершине, то есть путем,
-        // который прошли во время обхода
-        while(vertex != source){
-            stack.push(vertex);
-            vertex = edgeTo[vertex];
-        }
-        return stack;
-    }*/
-
-    /**
-     * Метод возвращает путь от самой вершины до требуемой
-     * @param from - стартовая вершина
-     * @param to - конечная вершина
-     * @param cameFrom - массив откуда пришли к этой вершине в процессе поиска
-     * @param visited - массив отметок посещены ли вершины
-     * @return - стэк пути между вершинами
-     */
-    /*private LinkedList<Integer> pathTo(int from, int to, int[] cameFrom, boolean[] visited){
-        if (!visited[to]){//проверяем дошли ли
-            return null;
-        }
-        //создаем стек, куда будем складывать вершины
-        LinkedList<Integer> stack = new LinkedList<>();
-        int vertex = to;
-        //наполняем стэк пока не вернемся к начальной вершине, то есть путем,
-        // который прошли во время обхода
-        while(vertex != from){
-            stack.push(vertex);
-            vertex = cameFrom[vertex];
-        }
-        return stack;
-    }*/
-
-    /*LinkedList<Integer> findShortestPathFromTo(Graph g, int from, int to){
-        //инициируем очередь
-        LinkedList<Integer> queue = new LinkedList<>();
-        //добавляем начальную вершину в конец очереди
-        queue.addLast(from);
-        //инициируем временный массив откуда пришли к этой вершине
-        int[] cameFrom = new int[g.getVertexCount()];
-        //инициируем временный массив маркеров посещена ли вершина
-        boolean[] visited = new boolean[g.getVertexCount()];
-        //сразу помечаем "посещен" стартовую вершину
-        visited[from] = true;
-        //крутим цикл пока очередь не пуста
-        while (!queue.isEmpty()) {
-            //сохраняем удаленную из начала очереди вершину
-            int vertex = queue.removeFirst();
-            //проверяем последовательно все элементы в ссылочном списке связей вершин-соседей w
-            for (int w : g.getAdjList(vertex)) {
-                if (!visited[w]) {
-                    //помечаем вершину-соседа, как посещенную
-                    visited[w] = true;
-                    //добавляем в ее ячейку массива вершину, откуда к ней пришли
-                    cameFrom[w] = vertex;
-                    //если вершина-сосед это искомая вершина
-                    if(w == to){
-                        //выходим из цикла и возвращаем полный путь
-                        return pathTo(from, to, cameFrom, visited);
-                    }
-                    //и теперь соседа добавляем в конец очереди, как текущую вершину
-                    queue.addLast(w);
-                }
-            }
-        }
-        return new LinkedList<>();//если не найден путь, возвращаем пустой ссылочный массив
-    }*/
-
-    /**
-     * Метод вывода ссылочный массив связей вершин(ссылочных массивов) графа, полученного после обхода
-     */
-    void showAdjacencyList(Graph g, PrintWriter out){
-        showAllAdjLists(g, g.getAdjList(), out);
-    }
-
-    /**
-     * Приватный метод последовательно выводит ссылочные массивы связей по каждой вершине графа
-     * @param linkedLists - ссылочный массив связей вершин(ссылочных массивов) графа
-     */
-    private void showAllAdjLists(Graph g, LinkedList<Integer>[] linkedLists, PrintWriter out){
-        for (int i = 0; i < linkedLists.length; i++) {
-            out.println(i + ": " + g.getAdjList(i));
-            out.flush();
-        }
-    }
-
-    public Graph getGraph() {
-        return graph;
     }
 }
