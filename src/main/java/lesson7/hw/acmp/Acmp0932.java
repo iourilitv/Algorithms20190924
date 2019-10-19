@@ -106,11 +106,18 @@ class TriplesFinder {
     private int vertexCount;//количество вершин в графе
     private Graph g;//граф
 
+    //TODO Added
+    private boolean[] used;
+
     TriplesFinder(int distance, Graph g) {
         this.distance = distance;
         this.g = g;
         adjLists = g.getAdjList();
         vertexCount = adjLists.length;
+
+        //TODO Added
+        used = new boolean[vertexCount];
+
         drafts = new ArrayList[vertexCount];//инициируем массив коллекций кандидатов
         triples = new ArrayList<>();
         for (int i = 0; i < drafts.length; i++) {//наполняем ее пустыми коллекциями
@@ -125,10 +132,21 @@ class TriplesFinder {
     int find() {
         //запускаем заполнение массива массивов draft
         for (int i = 0; i < vertexCount; i++) {
+            //TODO Deleted
             //запускаем поиск кандидатов для этой вершины
-            peekUpCandidates(i);
+            //peekUpCandidates(i);
             //анализируем массив кандидатов draft и наполняем коллекцию троек
-            checkTriples(i);
+            //checkTriples(i);
+            //TODO Added
+            //если вершина еще не использовалась
+            if(!used[i]){
+                //запускаем поиск кандидатов для этой вершины
+                peekUpCandidates(i);
+                //анализируем массив кандидатов draft и наполняем коллекцию троек
+                checkTriples(i);
+            }
+            //отмечаем вершину, как использованную
+            used[i] = true;
         }
         //возвращаем коллекцию массивов троек
         return triples.size();
@@ -136,6 +154,12 @@ class TriplesFinder {
 
     //Метод наполнения массива draft массивами кандидатами элементов троек
     private void peekUpCandidates(int source) {
+        //TODO Added
+        //если проверяеая вершина уже использована, то выходим
+        if(used[source]){
+            return;
+        }
+
         boolean[] marked = new boolean[vertexCount];//маркер посещен(visited)
         LinkedList<Integer> queue = new LinkedList<>();//инициируем очередь
         queue.addLast(source);//добавляем начальную вершину в конец очереди
@@ -168,6 +192,13 @@ class TriplesFinder {
 
     //Метод проверки массива кандидатов и наполнения массива троек
     private void checkTriples(int vertex) {
+        //TODO Added
+        //если размер листа кандидата = 2, помечаем их оба как использованные
+        if(drafts[vertex].size() == 2){
+            used[drafts[vertex].get(0)] = true;
+            used[drafts[vertex].get(1)] = true;
+        }
+
         //листаем ссылочный массив кандидатов вершины
         for (int i = 0; i < drafts[vertex].size() - 1; i++) {
             //проверяем в подцикле для выбранной вершины
