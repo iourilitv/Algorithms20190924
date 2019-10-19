@@ -136,7 +136,7 @@ class TriplesFinder {
 
     //Метод наполнения массива draft массивами кандидатами элементов троек
     private void peekUpCandidates(int source) {
-        boolean[] marked = new boolean[g.getVertexCount()];//маркер посещен(visited)
+        boolean[] marked = new boolean[vertexCount];//маркер посещен(visited)
         LinkedList<Integer> queue = new LinkedList<>();//инициируем очередь
         queue.addLast(source);//добавляем начальную вершину в конец очереди
         marked[source] = true;//сразу помечаем "посещен" текущую вершину
@@ -194,58 +194,34 @@ class TriplesFinder {
         LinkedList<Integer> queue = new LinkedList<>();
         //добавляем начальную вершину в конец очереди
         queue.addLast(from);
-        //инициируем временный массив откуда пришли к этой вершине
-        int[] cameFrom = new int[vertexCount];
         //инициируем временный массив маркеров посещена ли вершина
         boolean[] visited = new boolean[vertexCount];
         //сразу помечаем "посещен" стартовую вершину
         visited[from] = true;
-        //крутим цикл пока очередь не пуста
-        while (!queue.isEmpty()) {
-            //сохраняем удаленную из начала очереди вершину
-            int vertex = queue.removeFirst();
-            //проверяем последовательно все элементы в ссылочном списке связей вершин-соседей w
-            for (int w : g.getAdjList(vertex)) {
-                if (!visited[w]) {
-                    //помечаем вершину-соседа, как посещенную
-                    visited[w] = true;
-                    //добавляем в ее ячейку массива вершину, откуда к ней пришли
-                    cameFrom[w] = vertex;
-                    //если вершина-сосед это искомая вершина
-                    if(w == to){
-                        //выходим из цикла и возвращаем результат проверки дистанции пути
-                        return checkPathTo(from, to, cameFrom, visited);
+        //гоняем цикл пока не достигнем заданной дистанции
+        for (int i = 0; i < distance; i++) {
+            //инициируем временную очередь
+            LinkedList<Integer> curQueue = new LinkedList<>();
+            //крутим цикл пока очередь не пуста
+            while (!queue.isEmpty()) {
+                //сохраняем удаленную из начала очереди вершину
+                int vertex = queue.removeFirst();
+                //проверяем последовательно все элементы в ссылочном списке связей вершин-соседей w
+                for (int w : g.getAdjList(vertex)) {
+                    if (!visited[w]) {
+                        //помечаем вершину-соседа, как посещенную
+                        visited[w] = true;
+                        //и теперь соседа добавляем в конец очереди, как текущую вершину
+                        curQueue.addLast(w);
                     }
-                    //и теперь соседа добавляем в конец очереди, как текущую вершину
-                    queue.addLast(w);
                 }
             }
+            //присваиваем очереди ссылку на текущую очередь
+            queue = curQueue;
         }
-        return false;//если не найден путь, возвращаем false
-    }
-
-    /**
-     * Метод возвращает результат проверки дистанции пути от самой вершины до требуемой
-     * @param from - стартовая вершина
-     * @param to - конечная вершина
-     * @param cameFrom - массив откуда пришли к этой вершине в процессе поиска
-     * @param visited - массив отметок посещены ли вершины
-     * @return - true - вершины находятся на требуемом расстоянии друг от друга
-     */
-    private boolean checkPathTo(int from, int to, int[] cameFrom, boolean[] visited){
-        if (!visited[to]){//проверяем дошли ли
-            return false;
-        }
-        //создаем стек, куда будем складывать вершины
-        LinkedList<Integer> stack = new LinkedList<>();
-        int vertex = to;
-        //наполняем стэк пока не вернемся к начальной вершине, то есть путем,
-        // который прошли во время обхода
-        while(vertex != from){
-            stack.push(vertex);
-            vertex = cameFrom[vertex];
-        }
-        return stack.size() == distance;
+        //возвращаем результат проверки есть ли конечный пункт в связанном списке вершин,
+        // находящихся на заданном расстоянии от стартовой вершины
+        return queue.contains(to);
     }
 
     //Метод проверки на наличие дубликата тройки
@@ -288,10 +264,6 @@ class Graph {
         for (int i = 0; i < adjList.length; i++) {
             adjList[i] = new LinkedList<>();
         }
-    }
-
-    int getVertexCount() {
-        return vertexCount;
     }
 
     //Метод возвращает клон ссылочного массива связей заданной вершины, чтобы не испортили его извне.
