@@ -5,7 +5,6 @@ import java.util.LinkedList;
 public class ChainingHashMap<Key, Value> {
     private int capacity = 7;
     private int size = 0;
-
     private LinkedList<Node>[] st;
 
     ChainingHashMap() {
@@ -72,20 +71,35 @@ public class ChainingHashMap<Key, Value> {
         return null;
     }
 
+    //TODO L8hwTask1.Added
+    Value delete(Key key) {
+        isKeyNotNull(key);
+        int i = hash(key);
+        for (int j = 0; j < st[i].size(); j++) {
+            if (key.equals(st[i].get(j).key)) {
+                Node temp = st[i].get(j);
+                st[i].remove(st[i].get(j));
+                size--;
+                return temp.value;
+            }
+        }
+        return null;
+    }
+
     //TODO L8hwTask1.Deleted
     /*
     @Override
-    public String toString() {
+        public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < capacity; i++) {
             for (Node node : st[i]) {
-                sb.append(node.key).append("=").append(node.value).append(", ");
+                sb.append(node.key + "=" + node.value + ", ");
             }
             sb.append("\n");
         }
         return sb.toString();
     }*/
-    //TODO L8hwTask1.Deleted
+    //TODO L8hwTask1.Added
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
