@@ -72,6 +72,8 @@ public class ChainingHashMap<Key, Value> {
         return null;
     }
 
+    //TODO L8hwTask1.Deleted
+    /*
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -80,6 +82,23 @@ public class ChainingHashMap<Key, Value> {
                 sb.append(node.key).append("=").append(node.value).append(", ");
             }
             sb.append("\n");
+        }
+        return sb.toString();
+    }*/
+    //TODO L8hwTask1.Deleted
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("***ChainingHashMap***\n");
+        for (int i = 0; i < capacity; i++) {
+            sb.append(i).append(": [");
+            for (int j = 0; j < st[i].size(); j++) {
+                sb.append(st[i].get(j).key);
+                if(j != st[i].size() - 1){
+                    sb.append(", ");
+                }
+            }
+            sb.append("]\n");
         }
         return sb.toString();
     }

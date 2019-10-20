@@ -24,11 +24,11 @@ public class MainL8hw1 {
         System.out.println(map.get(155));
         System.out.println(map);
 
-        Random random = new Random();
-        for (int i = 0; i < 50; i++) {
-            map.put(random.nextInt(1000),"");
-        }
-        System.out.println(map);
+//        Random random = new Random();
+//        for (int i = 0; i < 50; i++) {
+//            map.put(random.nextInt(1000),"");
+//        }
+//        System.out.println(map);
 
     }
 }
