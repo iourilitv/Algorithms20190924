@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Translated by Yuriy Litvinenko from Python to Java.
  * Алгоритм Дейкстры работает только с направленными ациклическими графами,
  * которые нередко обозначаются сокращением DAG (Directed Acyclic Graph) и только с
- * положительными весами рёбер.
+ * положительными весами рёбер. При наличии отрицательных весов используйте алгоритм Беллмана-Форда.
  * Задача.
  * Найти самый быстрый путь от начала до конца. Веса ребер указаны в минутах.
  */
@@ -29,6 +29,10 @@ public class MainDA1 {
         graph.get("B").put("end", 5);
 
         DijkstraA1 dijkstraA1 = new DijkstraA1(graph);
-        System.out.println(dijkstraA1.toString());
+        //System.out.println(dijkstraA1.toString());
+
+        //The lowest cost way has been found!
+        //Cost: 6
+        //The way: beg --> B --> A --> end
     }
 }
