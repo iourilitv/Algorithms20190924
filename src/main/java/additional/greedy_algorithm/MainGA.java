@@ -1,5 +1,6 @@
 package additional.greedy_algorithm;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -26,7 +27,6 @@ public class MainGA {
         final HashMap<String, HashSet<String>> stations = new HashMap<>();
         //инициируем список требуемых штатов покрытия вещанием в виде хэш набора
         // с ключами - их названиями
-        //"mt" , "wa" , "or", "id", "nv", "ut", "са", "az"
         final HashSet<String> statesNeeded = new HashSet<>();
 
         //наполняем список станций
@@ -49,11 +49,17 @@ public class MainGA {
         stations.get("kfour").add("ut");
         stations.get("kfive").add("ca");
         stations.get("kfive").add("az");
+        //наполняем хэш множество штатов требующих радио покрытия
+        for (HashMap.Entry s: stations.entrySet()) {
+            statesNeeded.addAll((HashSet<String>) s.getValue());
+        }
 
+        System.out.println("statesNeeded: " + statesNeeded);
+        //"mt" , "wa" , "or", "id", "nv", "ut", "са", "az"
 
         GreedyA greedyA = new GreedyA(stations, statesNeeded);
-        System.out.println(greedyA.getResult());
-
+        System.out.println("Best stations list: " + greedyA.getResult());
+        //Best stations list: [kfour, ktwo, kthree, kfive]
 
     }
 }
