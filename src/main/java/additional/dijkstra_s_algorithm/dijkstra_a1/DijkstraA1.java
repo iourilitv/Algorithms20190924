@@ -6,6 +6,8 @@ import java.util.Stack;
 class DijkstraA1 {
     private final Integer INFINITY = Integer.MAX_VALUE;//константа бесконечности веса
     private final String NO_NODE = "NO_NODE";//константа для пустого родителя
+    private String START_NODE;//начальный узел
+    private String FIN_NODE;//конечный узел
 
     //Для реализации этого примера понадобятся три хеш-таблицы.
     //получаем взвешенный граф в виде хэш таблицы хэш таблиц весов ребер
@@ -19,8 +21,10 @@ class DijkstraA1 {
     //инициируем хэш таблицу отметок был ли узел уже посещен
     private HashMap<String, Boolean> visited = new HashMap<>();
 
-    DijkstraA1(HashMap<String, HashMap<String, Integer>> graph) {
+    DijkstraA1(HashMap<String, HashMap<String, Integer>> graph, String start, String finish) {
         this.graph = graph;
+        START_NODE = start;
+        FIN_NODE = finish;
         //наполняем таблицы начальными значениями
         init();
         //запускаем поиск самого быстрого пути
@@ -34,24 +38,23 @@ class DijkstraA1 {
         for (HashMap.Entry g: graph.entrySet()) {
             //наполняем хэш таблицу отметок посещений
             visited.put(g.getKey().toString(), false);
-
             //наполняем хэш таблицы весов узлов и родителей
             //наполняем значениями только для узлов, связанных с началом
-            if (g.getKey().toString().equals("beg")){
-                for (HashMap.Entry beg: graph.get("beg").entrySet()) {
+            if (g.getKey().toString().equals(START_NODE)){
+                for (HashMap.Entry beg: graph.get(START_NODE).entrySet()) {
                     // вес узлов устанавливаем равным весу ребер
                     costs.put(beg.getKey().toString(), (Integer)beg.getValue());
                     //родителем узлов устанавливаем начало
-                    parents.put(beg.getKey().toString(), "beg");
+                    parents.put(beg.getKey().toString(), START_NODE);
                 }
-            } else{//для не связанных с началом
+            //для не связанных с началом
+            } else if (!costs.containsKey(g.getKey().toString())){//если еще не установлены значения
                 //вес устанавливаем бесконечность
                 costs.put(g.getKey().toString(), INFINITY);
                 //устанавливаем пустого родителя
                 parents.put(g.getKey().toString(), NO_NODE);
             }
         }
-
     }
 
     //Метод поиска самого быстрого пути
@@ -108,10 +111,10 @@ class DijkstraA1 {
     private void showResult() {
         StringBuilder sb = new StringBuilder();
         Stack stack = new Stack();
-        String string = "The lowest cost way has been found!\n" + "Cost: " + costs.get("end") +
+        String string = "The lowest cost way has been found!\n" + "Cost: " + costs.get(FIN_NODE) +
                 "\nThe way: ";
         sb.append(string);
-        stack = getParent("end", stack);
+        stack = getParent(FIN_NODE, stack);
         while(!stack.empty()){
             sb.append(stack.pop());
         }

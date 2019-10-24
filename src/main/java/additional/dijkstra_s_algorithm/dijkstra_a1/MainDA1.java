@@ -28,7 +28,7 @@ public class MainDA1 {
         graph.get("B").put("A", 3);
         graph.get("B").put("end", 5);
 
-        DijkstraA1 dijkstraA1 = new DijkstraA1(graph);
+        DijkstraA1 dijkstraA1 = new DijkstraA1(graph, "beg", "end");
         //System.out.println(dijkstraA1.toString());
 
         //The lowest cost way has been found!
