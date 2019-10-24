@@ -42,8 +42,11 @@ public class MainDA2 {
         graph.get("drum").put("piano", 10);
 
         DijkstraA2 dijkstraA2 = new DijkstraA2(graph, "book", "piano");
-        System.out.println(dijkstraA2.toString());
+        //System.out.println(dijkstraA2.toString());
 
+        //The lowest cost way has been found!
+        //Cost: 35
+        //The way: book --> vinyl --> drum --> piano
 
     }
 }

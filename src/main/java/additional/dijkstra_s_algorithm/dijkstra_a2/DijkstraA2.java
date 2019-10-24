@@ -28,14 +28,16 @@ class DijkstraA2 {
         //наполняем таблицы начальными значениями
         init();
         //запускаем поиск самого быстрого пути
-        //run();
+        run();
         //выводим результаты
-        //showResult();
+        showResult();
     }
 
     //Метод наполния таблиц начальными значениями
     private void init() {
         for (HashMap.Entry g: graph.entrySet()) {
+            //наполняем хэш таблицу отметок посещений
+            visited.put(g.getKey().toString(), false);
             //наполняем хэш таблицы весов узлов и родителей
             //наполняем значениями только для узлов, связанных с началом
             if (g.getKey().toString().equals(START_NODE)){
@@ -45,16 +47,14 @@ class DijkstraA2 {
                     //родителем узлов устанавливаем начало
                     parents.put(start.getKey().toString(), START_NODE);
                 }
-            } else if (!costs.containsKey(g.getKey().toString())){//для не связанных с началом
+            //для не связанных с началом
+            } else if (!costs.containsKey(g.getKey().toString())){//если еще не установлены значения
                 //вес устанавливаем бесконечность
                 costs.put(g.getKey().toString(), INFINITY);
                 //устанавливаем пустого родителя
                 parents.put(g.getKey().toString(), NO_NODE);
             }
-            //наполняем хэш таблицу отметок посещений
-            visited.put(g.getKey().toString(), false);
         }
-
     }
 
     //Метод поиска самого быстрого пути
@@ -111,10 +111,10 @@ class DijkstraA2 {
     private void showResult() {
         StringBuilder sb = new StringBuilder();
         Stack stack = new Stack();
-        String string = "The lowest cost way has been found!\n" + "Cost: " + costs.get("end") +
+        String string = "The lowest cost way has been found!\n" + "Cost: " + costs.get(FIN_NODE) +
                 "\nThe way: ";
         sb.append(string);
-        stack = getParent("end", stack);
+        stack = getParent(FIN_NODE, stack);
         while(!stack.empty()){
             sb.append(stack.pop());
         }
