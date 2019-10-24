@@ -1,8 +1,8 @@
 package additional.greedy_algorithm;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Книга Адитья Бхаргава.Грокаем алгоритмы. Aditya Bhargava.Grokking Algorithms.2017
@@ -50,8 +50,8 @@ public class MainGA {
         stations.get("kfive").add("ca");
         stations.get("kfive").add("az");
         //наполняем хэш множество штатов требующих радио покрытия
-        for (HashMap.Entry s: stations.entrySet()) {
-            statesNeeded.addAll((HashSet<String>) s.getValue());
+        for (Map.Entry<String, HashSet<String>> s: stations.entrySet()) {
+            statesNeeded.addAll(s.getValue());
         }
 
         System.out.println("statesNeeded: " + statesNeeded);

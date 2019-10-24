@@ -2,6 +2,7 @@ package additional.greedy_algorithm;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 class GreedyA {
     private final String NO_STATION = "NO_STATION";//константа - нет радиостанции
@@ -25,16 +26,16 @@ class GreedyA {
             HashSet<String> bestStationCovered = new HashSet<>();
             //перебираем все станции, чтобы найти среди них наилучшую
             // (с наибольшим покрытием из оставшихся неохваченных штатов?)
-            for (HashMap.Entry s : stations.entrySet()) {
+            for (Map.Entry<String, HashSet<String>> s : stations.entrySet()) {//warning: for (HashMap.Entry s : stations.entrySet()) {
                 //инициируем копию списка покрытия радиостанцией
-                HashSet<String> covered = new HashSet<>((HashSet<String>) s.getValue());
+                HashSet<String> covered = new HashSet<>(s.getValue());//warning: new HashSet<>((HashSet<String>) s.getValue());
                 //ищем пересечение множеств - останется только множество штатов, не получивших еще
                 // покрытия другими станциями и которые покрываются текущей станцией
                 covered.retainAll(statesNeeded);
                 //если покрытие текущей станции больше, чем лучшая из проверенных станций,
                 if (covered.size() > bestStationCovered.size()) {
                     //то сохраняем ее как лучшую на этот момент
-                    bestStation = s.getKey().toString();
+                    bestStation = s.getKey();//warning: s.getKey().toString()
                     //и сохраняем ее покрытие как покрытие лучшей станцией
                     bestStationCovered = covered;
                 }
@@ -48,7 +49,7 @@ class GreedyA {
 
     //TODO временно
     //геттер для получения результата
-    HashSet getResult() {
+    HashSet<String> getResult() {
         return finalStations;
     }
 
