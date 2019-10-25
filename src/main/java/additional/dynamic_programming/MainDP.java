@@ -1,7 +1,6 @@
 package additional.dynamic_programming;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Книга Адитья Бхаргава.Грокаем алгоритмы. Aditya Bhargava.Grokking Algorithms.2017
@@ -32,9 +31,20 @@ public class MainDP {
         things.put("camera", new Thing("camera", 1, 6));
 
         DynamicP dynamicP = new DynamicP(1, things);
-        HashSet<Thing> resultSet = dynamicP.getResultSet();
-        System.out.println("The maximum cost set of goods: " + resultSet);
-        System.out.println("The total cost of set of goods: " + dynamicP.getResultWeight(resultSet));
+        Knapsack knapsack = dynamicP.getResultKnapsack();
+        System.out.println("\nThe maximum cost set of goods: " + knapsack.getThingsInside());
+        System.out.println("The total weight of set of goods: " + knapsack.getWeightOfThingsInside());
+        System.out.println("The total cost of set of goods: " + knapsack.getCostOfThingsInside());
 
+        //columns: [1, 2, 3]
+        //rows[0]=book={weight=1, cost=3}: [Knapsack{capacity=1, thingsInside=[book={weight=1, cost=3}], weightOfThingsInside=0, costOfThingsInside=0}, Knapsack{capacity=2, thingsInside=[book={weight=1, cost=3}], weightOfThingsInside=0, costOfThingsInside=0}, Knapsack{capacity=3, thingsInside=[book={weight=1, cost=3}], weightOfThingsInside=0, costOfThingsInside=0}]
+        //rows[1]=jacket={weight=2, cost=5}: [Knapsack{capacity=1, thingsInside=[jacket={weight=2, cost=5}, book={weight=1, cost=3}], weightOfThingsInside=0, costOfThingsInside=0}, Knapsack{capacity=2, thingsInside=[jacket={weight=2, cost=5}], weightOfThingsInside=0, costOfThingsInside=0}, Knapsack{capacity=3, thingsInside=[jacket={weight=2, cost=5}, book={weight=1, cost=3}], weightOfThingsInside=1, costOfThingsInside=3}]
+        //rows[2]=camera={weight=1, cost=6}: [Knapsack{capacity=1, thingsInside=[camera={weight=1, cost=6}], weightOfThingsInside=0, costOfThingsInside=0}, Knapsack{capacity=2, thingsInside=[camera={weight=1, cost=6}, jacket={weight=2, cost=5}, book={weight=1, cost=3}], weightOfThingsInside=3, costOfThingsInside=8}, Knapsack{capacity=3, thingsInside=[camera={weight=1, cost=6}, jacket={weight=2, cost=5}], weightOfThingsInside=2, costOfThingsInside=5}]
+        //rows[3]=water={weight=3, cost=10}: [Knapsack{capacity=1, thingsInside=[camera={weight=1, cost=6}], weightOfThingsInside=0, costOfThingsInside=0}, Knapsack{capacity=2, thingsInside=[camera={weight=1, cost=6}, jacket={weight=2, cost=5}, book={weight=1, cost=3}], weightOfThingsInside=3, costOfThingsInside=8}, Knapsack{capacity=3, thingsInside=[water={weight=3, cost=10}], weightOfThingsInside=0, costOfThingsInside=0}]
+        //rows[4]=food={weight=2, cost=9}: [Knapsack{capacity=1, thingsInside=[camera={weight=1, cost=6}, food={weight=2, cost=9}], weightOfThingsInside=0, costOfThingsInside=0}, Knapsack{capacity=2, thingsInside=[food={weight=2, cost=9}], weightOfThingsInside=0, costOfThingsInside=0}, Knapsack{capacity=3, thingsInside=[camera={weight=1, cost=6}, food={weight=2, cost=9}], weightOfThingsInside=1, costOfThingsInside=6}]
+        //
+        //The maximum cost set of goods: [camera={weight=1, cost=6}, food={weight=2, cost=9}]
+        //The total weight of set of goods: 3
+        //The total cost of set of goods: 15
     }
 }
