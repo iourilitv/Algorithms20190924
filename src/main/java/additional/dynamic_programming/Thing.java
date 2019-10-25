@@ -15,13 +15,13 @@ class Thing {
         return weight;
     }
 
-    public Integer getCost() {
+    Integer getCost() {
         return cost;
     }
 
     @Override
     public String toString() {
-        return "{weight=" + weight +
+        return name + "={weight=" + weight +
                 ", cost=" + cost +
                 "}";
     }

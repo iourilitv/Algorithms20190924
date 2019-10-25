@@ -2,7 +2,6 @@ package additional.dynamic_programming;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 /**
  * Книга Адитья Бхаргава.Грокаем алгоритмы. Aditya Bhargava.Grokking Algorithms.2017
@@ -30,11 +29,12 @@ public class MainDP {
         things.put("book", new Thing("book", 1, 3));
         things.put("food", new Thing("food", 2, 9));
         things.put("jacket", new Thing("jacket", 2, 5));
-        things.put("camera", new Thing("book", 1, 6));
+        things.put("camera", new Thing("camera", 1, 6));
 
         DynamicP dynamicP = new DynamicP(1, things);
-//        System.out.println(things);
-//        System.out.println("Best stations list: " + greedyA.getResult());
+        HashSet<Thing> resultSet = dynamicP.getResultSet();
+        System.out.println("The maximum cost set of goods: " + resultSet);
+        System.out.println("The total cost of set of goods: " + dynamicP.getResultWeight(resultSet));
 
     }
 }
