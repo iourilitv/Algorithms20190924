@@ -31,7 +31,11 @@ class Knapsack {
         costOfThingsInside = calculateCostOfThingsInside(thingsInside);
     }
 
-    //Метод возвращает суммарную стоимость набора вещей в соответствующей ячейке
+    /**
+     * Метод возвращает суммарную стоимость набора вещей в соответствующей ячейке(подрюкзаке)
+     * @param things - набор вещей в рюкзаке
+     * @return суммарная стоимость набора вещей
+     */
     private int calculateCostOfThingsInside(HashSet<Thing> things) {
         int sum = 0;
         //перебираем набор вещей
@@ -42,7 +46,11 @@ class Knapsack {
         return sum;
     }
 
-    //Метод возвращает суммарную стоимость набора вещей в соответствующей ячейке
+    /**
+     * Метод возвращает суммарный вес набора вещей в соответствующей ячейке(подрюкзаке)
+     * @param things - набор вещей в рюкзаке
+     * @return суммарный вес набора вещей
+     */
     private int calculateWeightOfThingsInside(HashSet<Thing> things) {
         int sum = 0;
         //перебираем набор вещей
@@ -53,7 +61,10 @@ class Knapsack {
         return sum;
     }
 
-    //Метод добавления вещи в набор и песчета веса и стоимости набора
+    /**
+     * Метод добавления вещи в набор с добавлением ее веса и стоимости к суммарным весу и стоимости набора
+     * @param thing - набор вещей в рюкзаке
+     */
     void put(Thing thing){
         thingsInside.add(thing);
         costOfThingsInside += thing.getCost();
