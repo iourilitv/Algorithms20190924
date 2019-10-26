@@ -11,11 +11,17 @@ class DynamicP {
     private int[] columns;//массив значений колонок рассчетного массива
     //рассчетный двуразмерный массив с подрюкзаками вещей
     private Knapsack[][] knapsacks;
-    //получаем список вещей в виде хэш таблицы с ключами - максимальной найденой стоимостью набора и
-    // объектов вещей с их параметрами
+    //получаем список вещей в виде хэш таблицы с ключами - названия вещи и
+    // значениями - хэш множествами объектов вещей
     private HashMap<String, Thing> things;
     private Knapsack finalKnapsack;
 
+    /**
+     * Конструктор с заданной точности
+     * @param precision - заданная точность(шаг весов подрюкзаков)
+     * @param things - список вещей в виде хэш таблицы с ключами - названия вещи и
+     *                  значениями - хэш множествами объектов вещей
+     */
     DynamicP(int precision, HashMap<String, Thing> things) {
         this.precision = precision;
         this.things = things;
@@ -23,7 +29,30 @@ class DynamicP {
         fillKnapsacks();
     }
 
-    //Метод инициализации массива и его составляющих для поиска
+    /** //FIXME
+     * Конструктор без заданной точности
+     * @param things - список вещей в виде хэш таблицы с ключами - названия вещи и
+     *                  значениями - хэш множествами объектов вещей
+     */
+    DynamicP(HashMap<String, Thing> things) {
+        this.precision = calculatePrecision(); //FIXME //double required
+        this.things = things;
+        init();
+        fillKnapsacks();
+    }
+
+    /** //FIXME //double required
+     * Метод расчета точности(шага весов подрюкзаков)
+     * @return - расчитанное значение точности
+     */
+    private int calculatePrecision() {
+        int pre = 1;
+        return pre;
+    }
+
+    /**
+     * Метод инициализации массива и его составляющих для поиска
+     */
     private void init(){
         //инициализируем массив колонок с весами подрюкзаков с шагом равным точности
         createColumns();
@@ -33,7 +62,10 @@ class DynamicP {
         knapsacks = new Knapsack[rows.length][columns.length];
     }
 
-    //инициализируем массив строк(вещей)
+    /**
+     * Метод инициализирует массив строк, наполненный объектами вещей.
+     * Это требуется для организации массива подрюкзаков.
+     */
     private void createRows() {
         rows = new Thing[things.size()];
         int i = 0;
@@ -43,7 +75,10 @@ class DynamicP {
         }
     }
 
-    //Метод иницилизирует массив колонок с весами подрюкзаков с шагом равным точности
+    /**
+     * Метод иницилизирует массив колонок с весами подрюкзаков с шагом равным точности.
+     * Это требуется для организации массива подрюкзаков.
+     */
     private void createColumns() {
         int[] cols = findMinAndMaxWeight();
         int min = cols[0];
@@ -56,7 +91,10 @@ class DynamicP {
         }
     }
 
-    //Метод находит минимальное и максимальное значение веса заданных вещей
+    /**
+     * Метод находит минимальное и максимальное значение веса заданных вещей
+     * @return массив с минимальным и максимальным значением веса заданных вещей
+     */
     private int[] findMinAndMaxWeight() {
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
@@ -75,7 +113,9 @@ class DynamicP {
         return columns;
     }
 
-    //Метод поиска лучшего набора вещей, чтобы положить в рюкзак
+    /**
+     * Метод поиска лучшего набора вещей, чтобы положить в рюкзак
+     */
     private void fillKnapsacks() {
         //TODO временно
         System.out.println("columns: " + Arrays.toString(columns));
@@ -87,7 +127,11 @@ class DynamicP {
                 //**в начале расчет немного другой**
                 if(i == 0){
                     //записываем в ячейку хэш множество с пустым набором вещей
-                    knapsacks[i][j] = new Knapsack(columns[j], new HashSet<>());
+                    //TODO ERR.WrongKnapsackCalculating.Deleted
+                    //knapsacks[i][j] = new Knapsack(columns[j], new HashSet<>());
+                    //TODO ERR.WrongKnapsackCalculating.Added
+                    knapsacks[i][j] = new Knapsack(columns[j]);
+
                     //если текущая колонка меньше веса текущей вещи
                     if(columns[j] >= rows[i].getWeight()){
                         //добавляем текущую вещь в набор выбранных вещей
@@ -96,8 +140,13 @@ class DynamicP {
                 //**для остальных не начальных случаев**
                 //если вес текущей вещи больше вместимости подрюкзака
                 } else if(columns[j] < rows[i].getWeight()){
+                    //TODO ERR.WrongKnapsackCalculating.Deleted
                     //сохраняем в ячейку ссылку на предыдущий набор для этого веса рюкзака
-                    knapsacks[i][j] = knapsacks[i - 1][j];
+                    //knapsacks[i][j] = knapsacks[i - 1][j];
+                    //TODO ERR.WrongKnapsackCalculating.Added
+                    //создаем новый рюкзак с копией предыдущего набора для этого веса рюкзака
+                    knapsacks[i][j] = new Knapsack(columns[j], knapsacks[i - 1][j].getThingsInside());
+
                 //если вес текущей вещи не больше вместимости подрюкзака
                 } else if(columns[j] >= rows[i].getWeight()){
                     //вычисляем вес остатка вместимости текущего подрюкзака после
@@ -119,8 +168,12 @@ class DynamicP {
                         //добавляем текущую вещь
                         knapsacks[i][j].put(rows[i]);
                     } else{ // если меньше
+                        //TODO ERR.WrongKnapsackCalculating.Deleted
                         //сохраняем в ячейку ссылку на предыдущий набор для этого веса рюкзака
-                        knapsacks[i][j] = knapsacks[i - 1][j];
+                        //knapsacks[i][j] = knapsacks[i - 1][j];
+                        //TODO ERR.WrongKnapsackCalculating.Added
+                        //создаем новый рюкзак с копией предыдущего набора для этого веса рюкзака
+                        knapsacks[i][j] = new Knapsack(columns[j], knapsacks[i - 1][j].getThingsInside());
                     }
                 }
             }
@@ -133,21 +186,39 @@ class DynamicP {
                 knapsacks[rows.length - 1][columns.length - 1].getThingsInside());
     }
 
-    //Метод возвращаем максимальную стоимость набора вещей, которые можно впихнуть в подрюкзак
-    // с заданной вместимостью
-    private Knapsack getMaxCostSubknapsack(Knapsack[] sets, int weight) {
-        Knapsack set = new Knapsack(0, new HashSet<>());
+    /**
+     * Метод возвращаем подрюкзак с максимальной стоимостью набора вещей, которые можно впихнуть в подрюкзак
+     * с заданной вместимостью
+     * @param knapsacks - все подрюкзаки в строке массива подрюкзаков
+     * @param weight - вес искомого подрюкзака
+     * @return рюкзак в виде хэш множества
+     */
+    private Knapsack getMaxCostSubknapsack(Knapsack[] knapsacks, int weight) {
+        //TODO ERR.WrongKnapsackCalculating.Deleted
+        //Knapsack knapsack = new Knapsack(0, new HashSet<>());
+        //TODO ERR.WrongKnapsackCalculating.Added
+        //создаем пустой рюкзак, чтобы не выскакивало исключение на этапе сравнения рюкзаков, если null
+        //Knapsack knapsack = new Knapsack(0);
+
         //перебираем подмассив подрюкзаков
-        for (int i = 0; i < sets.length; i++) {
+        for (int i = 0; i < knapsacks.length; i++) {
             //если колонка веса подрюкзака совпадает с проверяемым весом
             if(columns[i] == weight){
                 //присваиваем временной переменной набор вещей в соответствующей ячейке
-                set = sets[i];
+                return knapsacks[i];
+
+                //knapsack = knapsacks[i];
             }
         }
-        return set;
+        //return knapsack;
+        //создаем пустой рюкзак, чтобы не выскакивало исключение на этапе сравнения рюкзаков, если null
+        return new Knapsack(weight);
     }
 
+    /**
+     * Метод возвращает итоговый рюкзак
+     * @return рюкзак с набором подобранного набора вещей
+     */
     Knapsack getResultKnapsack() {
         return finalKnapsack;
     }

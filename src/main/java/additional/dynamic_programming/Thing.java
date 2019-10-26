@@ -1,7 +1,7 @@
 package additional.dynamic_programming;
 
 class Thing {
-    private String name;//вес вещи
+    private String name;//имя вещи
     private Integer weight;//вес вещи
     private Integer cost;//стоимость вещи
 
