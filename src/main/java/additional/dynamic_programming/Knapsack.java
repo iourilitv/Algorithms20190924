@@ -8,15 +8,6 @@ class Knapsack {
     private int weightOfThingsInside;//суммарный вес вещей в рюкзаке
     private int costOfThingsInside;//суммарный вес вещей в рюкзаке
 
-    //TODO ERR.WrongKnapsackCalculating.Deleted
-    /*Knapsack(int capacity, HashSet<Thing> thingsInside) {
-        this.capacity = capacity;
-        this.thingsInside = thingsInside;
-        weightOfThingsInside = calculateWeightOfThingsInside(thingsInside);
-        costOfThingsInside = calculateCostOfThingsInside(thingsInside);
-    }*/
-    //TODO ERR.WrongKnapsackCalculating.Added
-
     /**
      * Конструктор для создания пустых рюкзаков с заданной вместимостью
      * @param capacity - вместимость(по весу) рюкзака
@@ -28,7 +19,6 @@ class Knapsack {
         costOfThingsInside = 0;
     }
 
-    //TODO ERR.WrongKnapsackCalculating.Added
     /**
      * Конструктор для создания копий рюкзаков с заданной вместимостью
      * @param capacity - вместимость(по весу) рюкзака
@@ -66,8 +56,6 @@ class Knapsack {
     //Метод добавления вещи в набор и песчета веса и стоимости набора
     void put(Thing thing){
         thingsInside.add(thing);
-//        costOfThingsInside = calculateCostOfThingsInside(thingsInside);
-//        weightOfThingsInside = calculateWeightOfThingsInside(thingsInside);
         costOfThingsInside += thing.getCost();
         weightOfThingsInside += thing.getWeight();
     }
